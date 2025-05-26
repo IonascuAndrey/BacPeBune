@@ -28,3 +28,13 @@ README.md
 !.git/config
 !.git/packed-refs
 !.git/refs/heads/**
+
+node_modules
+npm-debug.log
+Dockerfile
+docker-compose.yml
+.git
+.gitignore
+*.md
+react-mindmap-app/node_modules
+react-mindmap-app/npm-debug.log

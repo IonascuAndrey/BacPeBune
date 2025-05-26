@@ -2,7 +2,26 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<!-- Sectiune principala -->
+<section class="py-5 w-100" style="background: linear-gradient(135deg, #e3f0ff 0%, #ffffff 100%); margin:0; padding:0;">
+  <div class="container-fluid">
+    <div class="row align-items-center">
+      <div class="col-md-7 text-center text-md-start">
+        <h1 class="fw-bold text-primary mb-3" style="font-size: 3rem;">BAC Smart Learning</h1>
+        <p class="lead mb-4">
+          Platformă educațională completă pentru pregătirea examenului de Bacalaureat la matematică și informatică.<br>
+          Accesează lecții structurate, exerciții rezolvate și teste pentru a-ți maximiza șansele de reușită.
+        </p>
+        <div>
+            <a asp-controller="Matematica" asp-action="Index" class="btn btn-primary me-2">Matematică</a>
+            <a asp-controller="Informatica" asp-action="Index" class="btn btn-outline-primary">Informatică</a>
+        </div>
+      </div>
+      <div class="col-md-5 text-center">
+        <div class="bg-light rounded" style="width: 300px; height: 300px; display: inline-block;">
+          <img src="~/img/exam.png" alt="Presentation photo" class="img-fluid h-100 w-100 object-fit-contain" asp-append-version="true" />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
