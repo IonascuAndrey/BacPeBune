@@ -1,7 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 <!-- Sectiune principala -->
 <section class="py-5 w-100" style="background: linear-gradient(135deg, #e3f0ff 0%, #ffffff 100%); margin:0; padding:0;">
   <div class="container-fluid">
@@ -20,6 +20,42 @@
       <div class="col-md-5 text-center">
         <div class="bg-light rounded" style="width: 300px; height: 300px; display: inline-block;">
           <img src="~/img/exam.png" alt="Presentation photo" class="img-fluid h-100 w-100 object-fit-contain" asp-append-version="true" />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div style="height: 5vh"></div>
+  <h2 class="mb-3 text-center">Materii</h2>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 mb-4">
+        <div class="card text-center">
+          <div class="card-body">
+            <div class="mb-3"><i class="bi bi-book"></i></div>
+          </div>
+          <h5 class="card-title">Matematică</h5>
+          <p class="card-text">
+              Algebră, analiză matematică, geometrie și trigonometrie.<br>
+              Toate lecțiile sunt structurate pe ani de studiu și capitole, conform programei școlare.
+          </p>
+          <a asp-controller="Matematica" asp-action="Index" class="btn btn-primary">Accesează</a>
+        </div>
+      </div>
+
+      <div class="col-md-6 mb-4"></div>
+        <div class="card text-center">
+          <div class="card-body">
+            <div class="mb-3"><i class="bi bi-book"></i></div>
+          </div>
+          <h5 class="card-title">Informatică</h5>
+          <p class="card-text">
+              Algoritmi, structuri de date, programare și baze de date.<br>
+              Toate lecțiile sunt structurate pe ani de studiu și capitole, conform programei școlare.
+            </p>
+          <a asp-controller="Informatica" asp-action="Index" class="btn btn-primary">Accesează</a>
         </div>
       </div>
     </div>

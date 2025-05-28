@@ -32,8 +32,6 @@ bin/
 obj/
 # ASP.NET Scaffolding
 Scaffolding/
-# Microsoft Azure Web App
-wwwroot/
 # npm packages and node_modules folder
 node_modules/
 # Mac system files
