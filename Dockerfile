@@ -15,7 +15,6 @@ RUN grep -q "Microsoft.EntityFrameworkCore" BacPeBune.csproj || dotnet add packa
 RUN grep -q "Microsoft.EntityFrameworkCore.SqlServer" BacPeBune.csproj || dotnet add package Microsoft.EntityFrameworkCore.SqlServer
 RUN grep -q "Microsoft.EntityFrameworkCore.Tools" BacPeBune.csproj || dotnet add package Microsoft.EntityFrameworkCore.Tools
 
-
 RUN dotnet restore "./BacPeBune.csproj"
 COPY . .
 WORKDIR "/src/."
