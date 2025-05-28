@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using BacPeBune.Data;
 using BacPeBune.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,10 +8,12 @@ namespace BacPeBune.Controllers
     public class LectiiController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly ApplicationDbContext _context;
 
-        public LectiiController(ILogger<HomeController> logger)
+        public LectiiController(ILogger<HomeController> logger, ApplicationDbContext context)
         {
             _logger = logger;
+            _context = context;
         }
 
         public IActionResult Index()
@@ -29,9 +32,13 @@ namespace BacPeBune.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        public IActionResult Index(String lesson_name)
+        public IActionResult Index(int lesson_id)
         {
-            return Index(lesson_name);
+            var lesson = _context.Lessons.FirstOrDefault(l => l.LessonID == lesson_id);
+            var quiz = _context.Quizzes.FirstOrDefault(q => q.LessonID == lesson_id);
+
+            ViewBag.Quiz = quiz;
+            return View(lesson);
         }
     }
 }

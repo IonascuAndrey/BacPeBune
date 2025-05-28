@@ -1,3 +1,18 @@
-@using BacPeBune.Models
+@model BacPeBune.Models.Lesson
+
+@{
+    ViewBag.Title = @Model.Title;
+    var quiz = ViewBag.Quiz as BacPeBune.Models.Quiz;
+}
+
+<div class="lesson-box">
+    <h1>@Model.Title</h1>
+
+    <iframe src="@Model.PdfLink" width="100%" height="600px"></iframe>
+
+    @if(quiz != null){
+        <iframe src="@Url.Action("Show", "Quiz", new {quiz_id = quiz.QuizID}) width = "100%" height="600px"></iframe>
+    }
+</div>
 
 <!--implementat baza de date relatie id si pdf-->
