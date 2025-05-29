@@ -11,7 +11,10 @@
     <iframe src="@Model.PdfLink" width="100%" height="600px"></iframe>
 
     @if(quiz != null){
-        <iframe src="@Url.Action("Show", "Quiz", new {quiz_id = quiz.QuizID}) width = "100%" height="600px"></iframe>
+        <a href="@Url.Action("Show", "Quiz", new {quiz_id = ViewBag.QuizID})" width = "100%" height="600px"></a>
+    }
+    else{
+        <p class="no-quiz">Nu există un quiz asociat acestei lecții.</p>
     }
 </div>
 

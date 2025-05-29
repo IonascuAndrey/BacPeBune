@@ -32,12 +32,21 @@ namespace BacPeBune.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
+
+        [Route("Lectii/{lesson_id}")]
         public IActionResult Index(int lesson_id)
         {
+
             var lesson = _context.Lessons.FirstOrDefault(l => l.LessonID == lesson_id);
             var quiz = _context.Quizzes.FirstOrDefault(q => q.LessonID == lesson_id);
+            
+            if (lesson == null)
+            {
+                return NotFound("Lesson not found.");
+            }
 
-            ViewBag.Quiz = quiz;
+
+            ViewBag.quiz = quiz?.QuizID;
             return View(lesson);
         }
     }

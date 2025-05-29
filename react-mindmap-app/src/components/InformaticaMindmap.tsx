@@ -4,8 +4,8 @@ import Mindmap from './Mindmap';
 import type { Node, Edge } from 'react-flow-renderer';
 
 const nodes: Node[] = [
-  { id: '4', data: { label: 'React', url: "/Lectii/Index?id=4" }, position: { x: 500, y: 5 } },
-  { id: '5', data: { label: 'Dotnet', url: "/Lectii/Index?id=5" }, position: { x: 0, y: 0 } },
+  { id: '4', data: { label: 'React', url: `/Lectii/4` }, position: { x: 500, y: 5 } },
+  { id: '5', data: { label: 'Dotnet', url: `/Lectii/5` }, position: { x: 0, y: 0 } },
 ];
 
 const edges: Edge[] = [
