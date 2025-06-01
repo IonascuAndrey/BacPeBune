@@ -45,8 +45,8 @@ namespace BacPeBune.Controllers
                 return NotFound("Lesson not found.");
             }
 
-
-            ViewBag.quiz = quiz?.QuizID;
+        
+            ViewBag.quizID = quiz?.QuizID;
             return View(lesson);
         }
     }

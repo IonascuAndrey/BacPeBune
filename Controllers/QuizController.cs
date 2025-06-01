@@ -34,29 +34,37 @@ namespace BacPeBune.Controllers
 
         public IActionResult Show(int quizId, int? questionIndex = 0)
         {
-
-            // Retrieve the quiz from the database using the quizId
-            var quiz = _context.Quizzes
-                .FirstOrDefault(q => q.QuizID == quizId);
-
+            
             var questions = _context.Questions
             .Where(q => q.QuizID == quizId)
             .ToList();
 
-            if (questions == null || !questions.Any())
+            if (questions == null ) //|| questions.Count == 0
             {
                 return NotFound("No questions found for this quiz.");
             }
 
+            if (questionIndex < 0 || questionIndex >= questions.Count)
+            {
+                return NotFound("Invalid question index.");
+            }
+
             var currentQuestion = questions[questionIndex ?? 0];
-            ViewBag.Quiz = quiz;
+
+            var answers = _context.Answers
+            .Where(a => a.QuestionID == currentQuestion.QuestionID)
+            .ToList();
+
+            
             ViewBag.Questions = questions;
             ViewBag.CurrentQuestion = currentQuestion;
             ViewBag.QuestionIndex = questionIndex ?? 0;
+            ViewBag.Answers = answers;
+            ViewBag.IsLastQuestion = (questionIndex == questions.Count - 1);
 
             return View(currentQuestion);
         }
         
-        
+
     }
 }
