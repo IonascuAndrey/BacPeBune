@@ -3,7 +3,12 @@
 <h1>Question</h1>
 <p>@Model.Text</p>
 
-<form method="post" action="@Url.Action("Answer", "Quiz", new { quizId = Model.QuizID })">
+<form id="quizForm" method="post" asp-action="Show" asp-controller="Quiz")">
+    <input type="hidden" name="quizId" value="@Model.QuizID" />
+    <input type="hidden" name="questionIndex" value="@ViewBag.QuestionIndex" />
+    <input type="hidden" name="correctCount" value="@ViewBag.CorrectCount" />
+
+
     <fieldset>
         <legend>Select an answer:</legend>
         @if (ViewBag.Answers != null && ((List<BacPeBune.Models.Answer>)ViewBag.Answers).Any())
@@ -21,22 +26,16 @@
             <p>No answers available for this question.</p>
         }
     </fieldset>
-    @if(ViewBag.IsLastQuestion){
-        <button type="submit">Submit Answer</button>
-    }
+    
+    <button type="submit">Submit Answer</button>
+
+    <div class="feedback"></div>
+    
     
 </form>
 
-<div class="navigation-buttons">
-    @if ((int)ViewBag.QuestionIndex > 0)
-    {
-        <a href="@Url.Action("Show", "Quiz", new { quizId = Model.QuizID, questionIndex = (int)ViewBag.QuestionIndex - 1 })" class="btn btn-secondary">Previous</a>
-    }
 
-    @if( (int)ViewBag.QuestionIndex < ViewBag.Questions.Count - 1){
-        <a href="@Url.Action("Show", "Questions", new {quizId = Model.QuizID, questionIndex = (int)ViewBag.QuestionIndex + 1})"></a>
-    }
-</div>
+
 
 @if (ViewBag.QuestionIndex != null && ViewBag.Questions != null)
 {
