@@ -70,7 +70,7 @@ namespace BacPeBune.Controllers
         }
 
         [HttpPost]
-        public IActionResult Show(int quizId, int questionIndex, int correctCount, int selectedAnswer)
+        public IActionResult Show(int quizId, int questionIndex, int correctCount, string givenAnswers, int selectedAnswer)
         {
             var questions = _context.Questions.Where(q => q.QuizID == quizId).ToList();
             if (questionIndex < 0 || questionIndex >= questions.Count)
@@ -80,9 +80,19 @@ namespace BacPeBune.Controllers
             var answers = _context.Answers.Where(a => a.QuestionID == currentQuestion.QuestionID).ToList();
             var correctAnswer = answers.FirstOrDefault(a => a.IsCorrect);
 
+
+
             // Check if the answer is correct
             if (selectedAnswer == (correctAnswer?.AnswerID ?? -1))
+            {
                 correctCount++;
+                ViewBag.WasCorrect = true;
+            }
+            else
+            {
+                ViewBag.WasCorrect = false;
+                ViewBag.CorrectAnswerText = correctAnswer?.Text;
+            }
 
             // If last question, go to results
             if (questionIndex >= questions.Count - 1)
@@ -98,6 +108,12 @@ namespace BacPeBune.Controllers
             ViewBag.CorrectCount = correctCount;
             ViewBag.CorrectAnswerId = correctAnswer?.AnswerID ?? 0;
             ViewBag.IsLastQuestion = (questionIndex + 1 == questions.Count - 1);
+            if (ViewBag.GivenAnswers != null)
+            {
+                ViewBag.GivenAnswers = ViewBag.GivenAnswers.append(selectedAnswer);
+            } else {
+                ViewBag.GivenAnswers = new List<String>();
+            }
 
             var nextQuestion = questions[questionIndex + 1];
 
@@ -118,22 +134,43 @@ namespace BacPeBune.Controllers
                 .Where(a => questionsId.Contains(a.QuestionID))
                 .ToList();
 
+            var givenIds = (userAnswers ?? "")
+                .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                .Select(id => int.TryParse(id, out var val) ? val : -1)
+                .ToList();
+
+
             ViewBag.Questions = questions;
             ViewBag.Answers = answers;
             ViewBag.Percentage = cc / (double)questions.Count * 100;
+            ViewBag.GivenAnswers = userAnswers;
 
             double percentage = (double)cc / questions.Count * 100;
-            return RedirectToAction("Results", new { quizId, correctCount = cc, totalQuestions = questions.Count, percentage });
+            return RedirectToAction("Results", new { quizId, correctCount = cc, totalQuestions = questions.Count, percentage, givenAnswers = userAnswers });
         }
 
         [HttpGet]
-        public IActionResult Results(int quizId, int correctCount, int totalQuestions, double percentage)
-{
+        public IActionResult Results(int quizId, int correctCount, int totalQuestions, double percentage, string givenAnswers )
+    {
             ViewBag.CorrectCount = correctCount;
             ViewBag.TotalQuestions = totalQuestions;
             ViewBag.Percentage = percentage;
+            ViewBag.GivenAnswers = givenAnswers;
+
+            var questions = _context.Questions
+                .Where(q => q.QuizID == quizId)
+                .ToList();
+            ViewBag.Questions = questions;
+
+            var questionIds = _context.Questions
+                .Where(q => q.QuizID == quizId)
+                .Select(q => q.QuestionID)
+                .ToList();
 
 
+            ViewBag.CorrectAnswers = _context.Answers
+                .Where(a => a.IsCorrect && questionIds.Contains(a.QuestionID))
+                .ToList();
             return View();
         }
     }

@@ -1,3 +1,25 @@
-
 <h2>Quiz Results</h2>
 <p>You answered <strong>@ViewBag.CorrectCount</strong> out of <strong>@ViewBag.TotalQuestions</strong> correctly (<strong>@ViewBag.Percentage%</strong>).</p>
+@if (ViewBag.Questions != null && ViewBag.GivenAnswers != null && ViewBag.CorrectAnswers != null)
+{
+    for (int i = 0; i < ViewBag.Questions.Count && i < ViewBag.GivenAnswers.Count && i < ViewBag.CorrectAnswers.Count; i++)
+    {
+        var q = ViewBag.Questions[i];
+        var userAnswerId = ViewBag.GivenAnswers[i];
+        var correctAnswers = ViewBag.CorrectAnswers as List<dynamic>;
+        var correctAnswer = correctAnswers?.FirstOrDefault(a => a.QuestionID == q.QuestionID);
+        <h3>@q.Text</h3>
+        <p>
+            Your answer: 
+            @if (userAnswerId == (correctAnswer?.AnswerID ?? -1))
+            {
+                <span style="color:green;">Correct</span>
+            }
+            else
+            {
+                <span style="color:red;">Incorrect</span>
+            }
+        </p>
+        <p>Correct answer: @correctAnswer?.Text</p>
+    }
+}

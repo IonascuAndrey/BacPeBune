@@ -7,6 +7,7 @@
     <input type="hidden" name="quizId" value="@Model.QuizID" />
     <input type="hidden" name="questionIndex" value="@ViewBag.QuestionIndex" />
     <input type="hidden" name="correctCount" value="@ViewBag.CorrectCount" />
+    <input type="hidden" name="givenAnswers" value="@ViewBag.GivenAnswers"/>
 
 
     <fieldset>
@@ -29,7 +30,19 @@
     
     <button type="submit">Submit Answer</button>
 
-    <div class="feedback"></div>
+    <div class="feedback">
+        @if(ViewBag.WasCorrect != null)
+        {
+            if ((bool)ViewBag.WasCorrect)
+            {
+                <p class="correct">Correct!</p>
+            }
+            else
+            {
+                <p class="incorrect">Incorrect. The correct answer was: @ViewBag.CorrectAnswerText</p>
+            }
+        }
+    </div>
     
     
 </form>
