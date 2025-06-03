@@ -1,6 +1,19 @@
 <h2>Quiz Results</h2>
 <p>You answered <strong>@ViewBag.CorrectCount</strong> out of <strong>@ViewBag.TotalQuestions</strong> correctly (<strong>@ViewBag.Percentage%</strong>).</p>
-@if (ViewBag.Questions != null && ViewBag.GivenAnswers != null && ViewBag.CorrectAnswers != null)
+
+@foreach(var item in ViewBag.Questions){
+    <h3>@item.Text</h3>
+}
+
+@foreach(var item in ViewBag.GivenAnswers){
+    <p style="background-color:purple;">Your answer: @item</p>
+}
+
+@foreach(var item in ViewBag.CorrectAnswers){
+    <p style="background-color:green;">Correct answer: @item</p>
+}
+
+@* @if (ViewBag.Questions != null && ViewBag.GivenAnswers != null && ViewBag.CorrectAnswers != null)
 {
     for (int i = 0; i < ViewBag.Questions.Count && i < ViewBag.GivenAnswers.Count && i < ViewBag.CorrectAnswers.Count; i++)
     {
@@ -22,4 +35,4 @@
         </p>
         <p>Correct answer: @correctAnswer?.Text</p>
     }
-}
+} *@

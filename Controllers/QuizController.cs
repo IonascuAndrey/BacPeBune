@@ -65,6 +65,7 @@ namespace BacPeBune.Controllers
             ViewBag.IsLastQuestion = (questionIndex == questions.Count - 1);
             ViewBag.CorrectAnswerId = correctAnswer?.AnswerID ?? 0;
             ViewBag.CorrectCount = (ViewBag.CorrectCount != null) ?? 0;
+            ViewBag.GivenAnswers = string.Empty; // Initialize given answers as empty
 
             return View(currentQuestion);
         }
@@ -97,81 +98,109 @@ namespace BacPeBune.Controllers
             // If last question, go to results
             if (questionIndex >= questions.Count - 1)
             {
-                var percentage = (double)correctCount / questions.Count * 100;
-                return RedirectToAction("Results", new { quizId, correctCount, totalQuestions = questions.Count, percentage = percentage });
+
+
+                var questionsId = questions.Select(q => q.QuestionID).ToList();
+
+
+                string updatedGivenAnswersResult = string.IsNullOrEmpty(givenAnswers)
+                    ? selectedAnswer.ToString()
+                    : givenAnswers + "," + selectedAnswer;
+
+                var givenAnswerIds = updatedGivenAnswersResult
+                    .Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(int.Parse)
+                    .ToList();
+
+                var givenAnswersText = _context.Answers
+                    .Where(a => givenAnswerIds.Contains(a.AnswerID))
+                    .Select(a => a.Text)
+                    .ToList();
+
+                var correctAnswersIds = _context.Answers
+                    .Where(a => a.IsCorrect && questionsId.Contains(a.QuestionID))
+                    .Select(a => a.AnswerID)
+                    .ToList();
+
+                var correctAnswersTextResults = _context.Answers
+                    .Where(a => correctAnswersIds.Contains(a.AnswerID))
+                    .Select(a => a.Text)
+                    .ToList();
+
+                ViewBag.Questions = questions;
+                ViewBag.Answers = answers;
+                ViewBag.Percentage = correctCount / (double)questions.Count * 100;
+                ViewBag.GivenAnswersIds = givenAnswerIds;
+                ViewBag.CorrectAnswersIds = correctAnswersIds;
+                ViewBag.GivenAnswersText = givenAnswersText;
+                ViewBag.CorrectAnswersText = correctAnswersTextResults;
+
+                double percentage = (double)correctCount / questions.Count * 100;
+                return View("Results");
             }
 
             // Otherwise, show next question
+            var nextQuestion = questions[questionIndex + 1];
+            var nextAnswers = _context.Answers
+                .Where(a => a.QuestionID == nextQuestion.QuestionID)
+                .ToList();
+
             ViewBag.Questions = questions;
-            ViewBag.Answers = answers;
+            ViewBag.Answers = nextAnswers; // <-- Now correct!
             ViewBag.QuestionIndex = questionIndex + 1;
             ViewBag.CorrectCount = correctCount;
-            ViewBag.CorrectAnswerId = correctAnswer?.AnswerID ?? 0;
+            ViewBag.CorrectAnswerId = nextAnswers.FirstOrDefault(a => a.IsCorrect)?.AnswerID ?? 0;
             ViewBag.IsLastQuestion = (questionIndex + 1 == questions.Count - 1);
-            if (ViewBag.GivenAnswers != null)
-            {
-                ViewBag.GivenAnswers = ViewBag.GivenAnswers.append(selectedAnswer);
-            } else {
-                ViewBag.GivenAnswers = new List<String>();
-            }
 
-            var nextQuestion = questions[questionIndex + 1];
+            // Update GivenAnswers as a comma-separated string
+            string updatedGivenAnswers = string.IsNullOrEmpty(givenAnswers)
+                ? selectedAnswer.ToString()
+                : givenAnswers + "," + selectedAnswer;
+            ViewBag.GivenAnswers = updatedGivenAnswers;
+
+            var questionIds = _context.Questions
+                    .Where(q => q.QuizID == quizId)
+                    .Select(q => q.QuestionID)
+                    .ToList();
+
+            var correctAnswersText = _context.Answers
+                .Where(a => a.IsCorrect && questionIds.Contains(a.QuestionID))
+                .Select(a => a.Text)
+                .ToList();
+            ViewBag.CorrectAnswers = correctAnswersText;
 
             return View(nextQuestion);
         }
-
-
-        [HttpPost]
-        public IActionResult Results(int quizId, int questionIndex, int cc, string userAnswers)
-        {
-            var questions = _context.Questions
-                .Where(q => q.QuizID == quizId)
-                .ToList();
-
-            var questionsId = questions.Select(q => q.QuestionID).ToList();
-
-            var answers = _context.Answers
-                .Where(a => questionsId.Contains(a.QuestionID))
-                .ToList();
-
-            var givenIds = (userAnswers ?? "")
-                .Split(',', StringSplitOptions.RemoveEmptyEntries)
-                .Select(id => int.TryParse(id, out var val) ? val : -1)
-                .ToList();
-
-
-            ViewBag.Questions = questions;
-            ViewBag.Answers = answers;
-            ViewBag.Percentage = cc / (double)questions.Count * 100;
-            ViewBag.GivenAnswers = userAnswers;
-
-            double percentage = (double)cc / questions.Count * 100;
-            return RedirectToAction("Results", new { quizId, correctCount = cc, totalQuestions = questions.Count, percentage, givenAnswers = userAnswers });
-        }
-
-        [HttpGet]
-        public IActionResult Results(int quizId, int correctCount, int totalQuestions, double percentage, string givenAnswers )
-    {
-            ViewBag.CorrectCount = correctCount;
-            ViewBag.TotalQuestions = totalQuestions;
-            ViewBag.Percentage = percentage;
-            ViewBag.GivenAnswers = givenAnswers;
-
-            var questions = _context.Questions
-                .Where(q => q.QuizID == quizId)
-                .ToList();
-            ViewBag.Questions = questions;
-
-            var questionIds = _context.Questions
-                .Where(q => q.QuizID == quizId)
-                .Select(q => q.QuestionID)
-                .ToList();
-
-
-            ViewBag.CorrectAnswers = _context.Answers
-                .Where(a => a.IsCorrect && questionIds.Contains(a.QuestionID))
-                .ToList();
-            return View();
-        }
     }
 }
+        //[HttpGet]
+        //     public IActionResult Results(int quizId, int correctCount, int totalQuestions, double percentage, string givenAnswers )
+        // {
+        //         ViewBag.CorrectCount = correctCount;
+        //         ViewBag.TotalQuestions = totalQuestions;
+        //         ViewBag.Percentage = percentage;
+
+        //         var questions = _context.Questions
+        //             .Where(q => q.QuizID == quizId)
+        //             .ToList();
+        //         ViewBag.Questions = questions;
+
+        //         var questionIds = _context.Questions
+        //             .Where(q => q.QuizID == quizId)
+        //             .Select(q => q.QuestionID)
+        //             .ToList();
+
+
+        //         ViewBag.CorrectAnswers = _context.Answers
+        //             .Where(a => a.IsCorrect && questionIds.Contains(a.QuestionID))
+        //             .Select(a => a.Text)
+        //             .ToList();
+
+
+        //         _logger.LogInformation("Given answers: {GivenAnswers}", (object)(ViewBag.GivenAnswers as IEnumerable<int> ?? new List<int>()));
+        //         _logger.LogInformation("Correct answers: {CorrectAnswers}", (object)(ViewBag.CorrectAnswers as IEnumerable<object> ?? new List<object>()));
+
+        //         return View();
+        //     }
+        //}
+    
