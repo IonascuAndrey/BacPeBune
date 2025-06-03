@@ -35,6 +35,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseMigrationsEndPoint();
+    app.UseDeveloperExceptionPage();
 }
 else
 {
@@ -62,6 +63,7 @@ using (var scope = app.Services.CreateScope())
         // Consider re-throwing or exiting if DB is absolutely critical
     }
 }
+
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
