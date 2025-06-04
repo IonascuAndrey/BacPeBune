@@ -30,12 +30,13 @@
         color: #2196f3 !important;
     }
 
-    .materie-card {
-        transition: transform 0.2s ease;
+    .materie-hover {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        transform-origin: center;
     }
-
-    .materie-card:hover {
-        transform: scale(1.03);
+    .materie-hover:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 25px rgba(0, 123, 255, 0.3);
     }
 
     .hero-title {
@@ -88,6 +89,36 @@
         </div>
     </div>
 </section>
+
+<!-- Materii -->
+<section class="bg-dark text-white py-5">
+    <div class="container">
+        <h2 class="text-center fw-bold mb-5">Materii</h2>
+        <div class="row justify-content-center">
+            <!-- Card Matematică -->
+            <div class="col-md-5 mb-4">
+                <div class="card h-100 bg-dark border border-secondary text-center p-4 materie-hover" style="border-radius: 1rem;">
+                    <div class="mb-3 fs-1 text-primary"><i class="bi bi-book"></i></div>
+                    <h4 class="fw-bold text-white">Matematică</h4>
+                    <p class="text-white">Algebră, analiză matematică, geometrie și trigonometrie</p>
+                    <p class="text-secondary">Toate lecțiile sunt structurate pe ani de studiu și capitole, conform programei școlare.</p>
+                    <a asp-controller="Matematica" asp-action="Index" class="btn btn-primary">Accesează</a>
+                </div>
+            </div>
+            <!-- Card Informatică -->
+            <div class="col-md-5 mb-4">
+                <div class="card h-100 bg-dark border border-secondary text-center p-4 materie-hover" style="border-radius: 1rem;">
+                    <div class="mb-3 fs-1 text-primary"><i class="bi bi-code-slash"></i></div>
+                    <h4 class="fw-bold text-white">Informatică</h4>
+                    <p class="text-white">Algoritmi, structuri de date, programare și baze de date</p>
+                    <p class="text-secondary">Toate lecțiile sunt structurate pe ani de studiu și capitole, conform programei școlare.</p>
+                    <a asp-controller="Informatica" asp-action="Index" class="btn btn-primary">Accesează</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 
 <!-- Features Section -->
 <section class="py-5" style="background-color: #1e293b; color: white;">
