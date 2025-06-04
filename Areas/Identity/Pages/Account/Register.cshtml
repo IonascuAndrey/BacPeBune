@@ -3,15 +3,15 @@
 @{
     ViewData["Title"] = "Register";
 }
-
 <style>
     .register-container {
         min-height: 100vh;
         display: flex;
         align-items: center;
         justify-content: center;
-        background: linear-gradient(to right, #0f3f7f, #2ecc71);
+        background: linear-gradient(to right, #0f3f7f, #95a5a6); /* albastru-gri */
         font-family: 'Montserrat', sans-serif;
+        padding: 2rem;
     }
 
     .register-card {
@@ -23,16 +23,25 @@
         width: 100%;
         display: flex;
         flex-wrap: wrap;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .register-card:hover {
+        transform: scale(1.02);
+        box-shadow: 0 0 30px rgba(255, 255, 255, 0.5);
     }
 
     .register-form {
         padding: 40px;
         flex: 1 1 50%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
     }
 
     .register-image {
         flex: 1 1 50%;
-        background: url('/img/register-visual.png') center center/cover no-repeat;
+        background: url('/img/register.png') center center/cover no-repeat;
         min-height: 400px;
     }
 
@@ -55,6 +64,7 @@
         text-decoration: underline;
     }
 </style>
+
 
 <div class="register-container">
     <div class="register-card">
