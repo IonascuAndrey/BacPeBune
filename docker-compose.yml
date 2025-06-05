@@ -1,32 +1,30 @@
 version: '3.8'
 
 services:
-  backend:
+  mysql:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_DATABASE: bacpebune
+      MYSQL_USER: bacuser
+      MYSQL_PASSWORD: bacpass
+      MYSQL_ROOT_PASSWORD: rootpass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  app:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: backend
     ports:
       - "8080:8080"
     environment:
-      - ConnectionStrings__DefaultConnection=Server=db;Database=MyDb;User Id=sa;Password=TestPassword12!;TrustServerCertificate=True;Encrypt=False;
-    volumes:
-      - ./keys:/app/keys
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: "server=mysql;port=3306;database=bacpebune;user=bacuser;password=bacpass;"
     depends_on:
-      - db
-
-# TO CHECK IF THE MYDB IS CREATED
-
-  db:
-    image: mcr.microsoft.com/mssql/server:latest 
-    container_name: sql_server_db 
-    environment:
-      ACCEPT_EULA: "Y" 
-      SA_PASSWORD: "TestPassword12!"
-    ports:
-      - "1433:1433" 
-    volumes:
-      - sql_data:/var/opt/mssql 
+      - mysql
 
 volumes:
-  sql_data: 
+  mysql-data:

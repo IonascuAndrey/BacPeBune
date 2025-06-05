@@ -2,10 +2,10 @@
 
 #nullable disable
 
-namespace BacPeBune.Data.Migrations
+namespace BacPeBune.Migrations
 {
     /// <inheritdoc />
-    public partial class TestMigration : Migration
+    public partial class MySqlTransfer : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
