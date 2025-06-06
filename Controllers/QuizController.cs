@@ -2,6 +2,8 @@ using System.Diagnostics;
 using BacPeBune.Data;
 using BacPeBune.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+
 
 namespace BacPeBune.Controllers
 {
@@ -82,8 +84,6 @@ namespace BacPeBune.Controllers
             var correctAnswer = answers.FirstOrDefault(a => a.IsCorrect);
 
 
-
-            // Check if the answer is correct
             if (selectedAnswer == (correctAnswer?.AnswerID ?? -1))
             {
                 correctCount++;
@@ -95,14 +95,9 @@ namespace BacPeBune.Controllers
                 ViewBag.CorrectAnswerText = correctAnswer?.Text;
             }
 
-            // If last question, go to results
             if (questionIndex >= questions.Count - 1)
             {
-
-
                 var questionsId = questions.Select(q => q.QuestionID).ToList();
-
-
                 string updatedGivenAnswersResult = string.IsNullOrEmpty(givenAnswers)
                     ? selectedAnswer.ToString()
                     : givenAnswers + "," + selectedAnswer;
@@ -127,6 +122,8 @@ namespace BacPeBune.Controllers
                     .Select(a => a.Text)
                     .ToList();
 
+                double percentage = (double)correctCount / questions.Count * 100;
+                var UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 ViewBag.Questions = questions;
                 ViewBag.Answers = answers;
                 ViewBag.Percentage = correctCount / (double)questions.Count * 100;
@@ -135,7 +132,51 @@ namespace BacPeBune.Controllers
                 ViewBag.GivenAnswersText = givenAnswersText;
                 ViewBag.CorrectAnswersText = correctAnswersTextResults;
 
-                double percentage = (double)correctCount / questions.Count * 100;
+                if (percentage >= 50)
+                {
+                    
+                    var Quiz = _context.Quizzes.FirstOrDefault(q => q.QuizID == quizId);
+                    var UserReward = new UserReward
+                    {
+                        UserId = UserId,
+                        User = _context.Users.FirstOrDefault(u => u.Id == UserId),
+                        QuizId = quizId,
+                        Quiz = Quiz,
+                        Reward = Quiz.Reward,
+                        Date = DateTime.Now
+                    };
+                    _context.UserRewards.Add(UserReward);
+                    _context.SaveChanges();
+                }
+
+                var highestScoreSoFar = _context.UserQuizResults
+                    .Where(user => user.UserId == UserId && user.QuizId == quizId)
+                    .Select(user => user.Score);
+
+                if (!highestScoreSoFar.Any())
+                {
+                    var userQuizResult = new UserQuizResult
+                    {
+                        UserId = UserId,
+                        User = _context.Users.FirstOrDefault(u => u.Id == UserId),
+                        QuizId = quizId,
+                        Quiz = _context.Quizzes.FirstOrDefault(q => q.QuizID == quizId),
+                        Score = (int)percentage
+                    };
+                    _context.UserQuizResults.Add(userQuizResult);
+                }
+
+                var maxScore = highestScoreSoFar.DefaultIfEmpty(0).Max();
+                if (percentage >= maxScore)
+                {
+                    var userQuizResult = _context.UserQuizResults
+                        .FirstOrDefault(user => user.UserId == UserId && user.QuizId == quizId);
+                    userQuizResult.Score = (int)percentage;
+                    _context.UserQuizResults.Update(userQuizResult);
+                    _context.SaveChanges();
+                }
+
+                    
                 return View("Results");
             }
 

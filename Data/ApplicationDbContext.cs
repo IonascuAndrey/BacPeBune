@@ -16,5 +16,11 @@ namespace BacPeBune.Data
         public DbSet<Question> Questions { get; set; }
         public DbSet<Answer> Answers { get; set; }
         public DbSet<HasFinished> HasFinishedRecords { get; set; }
+
+        public DbSet<UserQuizResult> UserQuizResults { get; set; }
+
+        public DbSet<UserReward> UserRewards { get; set; }
+
+        
     }
 }
