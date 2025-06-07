@@ -46,7 +46,7 @@ namespace BacPeBune.Controllers
             }
 
         
-            ViewBag.quizID = quiz;
+            ViewBag.quizID = quiz?.QuizID;
             return View(lesson);
         }
     }
