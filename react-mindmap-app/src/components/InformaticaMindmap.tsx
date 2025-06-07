@@ -3,27 +3,37 @@ import React from 'react';
 import Mindmap from './Mindmap';
 import type { Node, Edge } from 'react-flow-renderer';
 
-const nodes: Node[] = [
+function addUrls(nodes: Node[]): Node[] {
+  return nodes.map(n => ({
+    ...n,
+    data: {
+      ...n.data,
+      url: `/Lectii/${n.id}`,
+    }
+  }));
+}
+
+const nodes: Node[] = addUrls([
   { id: '1', data: { label: 'Informatică' }, position: { x: 0, y: 0 } },
   { id: '2', data: { label: 'Clasa a IX-a' }, position: { x: 0, y: 100 } },
 
   // Elemente de bază ale limbajului C++
   { id: '3', data: { label: 'Elemente de bază ale limbajului C++' }, position: { x: -600-200-150, y: 200 } },
-    { id: '4', data: { label: 'Introducere in C++' }, position: { x: -600-200-150, y: 300 } },
-    { id: '5', data: { label: 'Tipuri de date C++' }, position: { x: -600-200-150, y: 400 } },
-      { id: '6', data: { label: 'Tipul char' }, position: { x: -750-200-150, y: 500 } },
-      { id: '7', data: { label: 'Conversii de tip' }, position: { x: -450-200-150, y: 500 } },
-    { id: '8', data: { label: 'Variabile și constante' }, position: { x: -600-200-150, y: 600 } },
-    { id: '9', data: { label: 'Intrări/ieșiri în C++' }, position: { x: -600-200-150, y: 700 } },
-      { id: '10', data: { label: 'Citiri și scrieri cu format' }, position: { x: -800-200-150, y: 800 } },
-      { id: '11', data: { label: 'Secvențe escape' }, position: { x: -600-200-150, y: 800 } },
-      { id: '12', data: { label: 'Operații de I/O cu fișiere în C++' }, position: { x: -400-200-150, y: 800 } },
-    { id: '13', data: { label: 'Operatori C++' }, position: { x: -600-200-150, y: 900 } },
+    { id: '4', data: { label: 'Introducere in C++', url: "/Lectii/4" }, position: { x: -600-200-150, y: 300 } },
+    { id: '5', data: { label: 'Tipuri de date C++', url: "/Lectii/5" }, position: { x: -600-200-150, y: 400 } },
+      { id: '6', data: { label: 'Tipul char', url: "/Lectii/6" }, position: { x: -750-200-150, y: 500 } },
+      { id: '7', data: { label: 'Conversii de tip', url: "/Lectii/7" }, position: { x: -450-200-150, y: 500 } },
+    { id: '8', data: { label: 'Variabile și constante', url: "/Lectii/8" }, position: { x: -600-200-150, y: 600 } },
+    { id: '9', data: { label: 'Intrări/ieșiri în C++', url: "/Lectii/9" }, position: { x: -600-200-150, y: 700 } },
+      { id: '10', data: { label: 'Citiri și scrieri cu format', url: "/Lectii/10" }, position: { x: -800-200-150, y: 800 } },
+      { id: '11', data: { label: 'Secvențe escape', url: "/Lectii/11" }, position: { x: -600-200-150, y: 800 } },
+      { id: '12', data: { label: 'Operații de I/O cu fișiere în C++', url: "/Lectii/12" }, position: { x: -400-200-150, y: 800 } },
+    { id: '13', data: { label: 'Operatori C++', url: "/Lectii/13" }, position: { x: -600-200-150, y: 900 } },
       { id: '14', data: { label: 'Operații logice' }, position: { x: -800-200-150, y: 1000 } },
-      { id: '15', data: { label: 'Operatorii de incrementare/decrementare' }, position: { x: -600-200-150, y: 1000 } },
-      { id: '16', data: { label: 'Operatorul condițional ?' }, position: { x: -400-200-150, y: 1000 } },
-    { id: '17', data: { label: 'Funcții C++ predefinite' }, position: { x: -600-200-150, y: 1100 } },
-    { id: '18', data: { label: 'Codul ASCII' }, position: { x: -600-200-150, y: 1200 } },
+      { id: '15', data: { label: 'Operatorii de incrementare/decrementare', url: "/Lectii/14" }, position: { x: -600-200-150, y: 1000 } },
+      { id: '16', data: { label: 'Operatorul condițional ?', url: "/Lectii/15" }, position: { x: -400-200-150, y: 1000 } },
+    { id: '17', data: { label: 'Funcții C++ predefinite', url: "/Lectii/16" }, position: { x: -600-200-150, y: 1100 } },
+    { id: '18', data: { label: 'Codul ASCII', url: "/Lectii/17" }, position: { x: -600-200-150, y: 1200 } },
 
   // Structuri de control
   { id: '19', data: { label: 'Structuri de control' }, position: { x: -300-150, y: 200 } },
@@ -71,7 +81,7 @@ const nodes: Node[] = [
       { id: '55', data: { label: 'Parcurgerea matricelor' }, position: { x: 750+500, y: 400 } },
     { id: '56', data: { label: 'Tablouri pătratice' }, position: { x: 600+500, y: 500 } },
     { id: '57', data: { label: 'Sume parțiale în matrice' }, position: { x: 600+500, y: 600 } },
-];
+]);
 
 const edges: Edge[] = [
   { id: 'e1-2', source: '1', target: '2' },
