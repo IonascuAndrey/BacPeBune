@@ -4,19 +4,125 @@
     ViewBag.Title = @Model.Title;
 }
 
-<div class="lesson-box">
+<style>
+    body {
+        background: #f2f5f9;
+        font-family: 'Montserrat', sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    .lesson-container {
+        max-width: 950px;
+        margin: 60px auto;
+        padding: 2.5rem;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        position: relative;
+    }
+
+    .lesson-container h1 {
+        font-size: 2.5rem;
+        color: #0f3f7f;
+        margin-bottom: 1.5rem;
+        text-align: center;
+        font-weight: 700;
+    }
+
+    .pdf-viewer {
+        width: 100%;
+        height: 600px;
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+        margin-bottom: 2rem;
+    }
+
+    .quiz-link {
+        display: inline-block;
+        padding: 14px 28px;
+        background-color: #2ecc71;
+        color: white;
+        border-radius: 10px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        font-size: 1rem;
+    }
+
+    .quiz-link:hover {
+        background-color: #27ae60;
+        transform: scale(1.05);
+        box-shadow: 0 0 10px rgba(39, 174, 96, 0.4);
+    }
+
+    .no-quiz {
+        color: #888;
+        text-align: center;
+        font-style: italic;
+        font-size: 1.1rem;
+    }
+
+    .quiz-btn-wrapper {
+        text-align: center;
+        margin-top: 2rem;
+    }
+
+    .nav-buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 3rem;
+    }
+
+    .nav-button {
+        background-color: #0f3f7f;
+        color: white;
+        padding: 12px 24px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: background-color 0.3s ease;
+    }
+
+    .nav-button:hover {
+        background-color: #0c3262;
+    }
+
+    @@media screen and (max-width: 768px) {
+        .nav-buttons {
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .nav-button {
+            width: 100%;
+            text-align: center;
+        }
+    }
+</style>
+
+<div class="lesson-container">
     <h1>@Model.Title</h1>
 
-    <iframe src="@Model.PdfLink" width="100%" height="600px"></iframe>
+    <iframe src="@Model.PdfLink" class="pdf-viewer"></iframe>
 
+    <div class="quiz-btn-wrapper">
+        @if (ViewBag.quizID != null)
+        {
+            <a class="quiz-link" href="@Url.Action("Show", "Quiz", new { quizId = ViewBag.quizID })">
+                Accesează quiz-ul
+            </a>
+        }
+        else
+        {
+            <p class="no-quiz">Nu există un quiz asociat acestei lecții.</p>
+        }
+    </div>
 
-
-    @if(ViewBag.quizID != null){
-        <a href="@Url.Action("Show", "Quiz", new { quizId = ViewBag.quizID })" width="100%" height="600px">Acceseaza quiz-ul</a>
-    }
-    else{
-        <p class="no-quiz">Nu există un quiz asociat acestei lecții.</p>
-    }
+    <div class="nav-buttons">
+        <a class="nav-button" href="@Url.Action("Index", "Lectii", new { lesson_id = Model.LessonID - 1 })">← Lecția anterioară</a>
+        <a class="nav-button" href="@Url.Action("Index", "Lectii", new { lesson_id = Model.LessonID + 1 })">Lecția următoare →</a>
+    </div>
 </div>
-
-<!--implementat baza de date relatie id si pdf-->
