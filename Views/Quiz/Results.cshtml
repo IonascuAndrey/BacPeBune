@@ -5,11 +5,11 @@
     <h3>@item.Text</h3>
 }
 
-@foreach(var item in ViewBag.GivenAnswers){
+@foreach(var item in ViewBag.GivenAnswersText){
     <p style="background-color:purple;">Your answer: @item</p>
 }
 
-@foreach(var item in ViewBag.CorrectAnswers){
+@foreach(var item in ViewBag.CorrectAnswersText){
     <p style="background-color:green;">Correct answer: @item</p>
 }
 
