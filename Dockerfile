@@ -11,9 +11,14 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["BacPeBune.csproj", "."]
 
-RUN grep -q "Microsoft.EntityFrameworkCore" BacPeBune.csproj || dotnet add package Microsoft.EntityFrameworkCore
-RUN grep -q "Microsoft.EntityFrameworkCore.SqlServer" BacPeBune.csproj || dotnet add package Microsoft.EntityFrameworkCore.SqlServer
-RUN grep -q "Microsoft.EntityFrameworkCore.Tools" BacPeBune.csproj || dotnet add package Microsoft.EntityFrameworkCore.Tools
+RUN grep -q "Microsoft.EntityFrameworkCore" BacPeBune.csproj || dotnet add package Microsoft.EntityFrameworkCore --version 8.0.13
+RUN grep -q "Microsoft.EntityFrameworkCore.Tools" BacPeBune.csproj || dotnet add package Microsoft.EntityFrameworkCore.Tools --version 8.0.13
+RUN grep -q "Pomelo.EntityFrameworkCore.MySql" BacPeBune.csproj || dotnet add package Pomelo.EntityFrameworkCore.MySql --version 8.0.3
+RUN grep -q "Microsoft.AspNetCore.Identity.EntityFrameworkCore" BacPeBune.csproj || dotnet add package Microsoft.AspNetCore.Identity.EntityFrameworkCore --version 8.0.13
+RUN grep -q "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" BacPeBune.csproj || dotnet add package Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore
+RUN grep -q "MySqlConnector" BacPeBune.csproj || dotnet add package MySqlConnector
+
+
 
 RUN dotnet restore "./BacPeBune.csproj"
 COPY . .

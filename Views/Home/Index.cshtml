@@ -1,63 +1,221 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "BacPeBune";
 }
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-<!-- Sectiune principala -->
-<section class="py-5 w-100" style="background: linear-gradient(135deg, #e3f0ff 0%, #ffffff 100%); margin:0; padding:0;">
-  <div class="container-fluid">
-    <div class="row align-items-center">
-      <div class="col-md-7 text-center text-md-start">
-        <h1 class="fw-bold text-primary mb-3" style="font-size: 3rem;">BAC Smart Learning</h1>
-        <p class="lead mb-4">
-          Platformă educațională completă pentru pregătirea examenului de Bacalaureat la matematică și informatică.<br>
-          Accesează lecții structurate, exerciții rezolvate și teste pentru a-ți maximiza șansele de reușită.
-        </p>
-        <div>
-            <a asp-controller="Matematica" asp-action="Index" class="btn btn-primary me-2">Matematică</a>
-            <a asp-controller="Informatica" asp-action="Index" class="btn btn-outline-primary">Informatică</a>
+
+<style>
+    html, body {
+        overflow-x: hidden;
+        margin: 0;
+        padding: 0;
+        scroll-behavior: smooth;
+    }
+
+    section {
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    img, .container, .row, .col-md-4, .col-md-5 {
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    .container {
+        max-width: 1140px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    footer a:hover {
+        color: #2196f3 !important;
+    }
+
+    .materie-hover {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        transform-origin: center;
+    }
+    .materie-hover:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 25px rgba(0, 123, 255, 0.3);
+    }
+
+    .hero-title {
+        font-size: 3.5rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.25rem;
+    }
+
+    ::-webkit-scrollbar {
+        width: 0px;
+        height: 0px;
+    }
+
+    body {
+        overflow-x: hidden;
+    }
+
+    header.navbar {
+        position: sticky;
+        top: 0;
+        z-index: 999;
+        background-color: #0f172a;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+</style>
+
+
+<!-- Hero Section -->
+<section class="py-5" style="background: radial-gradient(circle at top left, #0f3f7f, #00182f); color: white;">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 text-center text-lg-start">
+                <h1 class="fw-bold mb-3 hero-title">BacPeBune</h1>
+                <p class="hero-subtitle mb-4">
+                    Platformă educațională completă pentru pregătirea examenului de Bacalaureat la matematică și informatică.<br />
+                    Accesează lecții structurate, exerciții rezolvate și teste pentru a-ți maximiza șansele de reușită.
+                </p>
+                <div class="d-flex justify-content-center justify-content-lg-start gap-3">
+                    <a asp-controller="Matematica" asp-action="Index" class="btn btn-primary px-4">Matematică</a>
+                    <a asp-controller="Informatica" asp-action="Index" class="btn btn-outline-light px-4">Informatică</a>
+                </div>
+            </div>
+            <div class="col-lg-6 text-center mt-4 mt-lg-0">
+                <div class="bg-light rounded shadow" style="width: 320px; height: 320px; display: inline-block;">
+                    <img src="~/img/exam.png" alt="Imagine BAC" class="img-fluid h-100 w-100 object-fit-contain" asp-append-version="true" />
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="col-md-5 text-center">
-        <div class="bg-light rounded" style="width: 300px; height: 300px; display: inline-block;">
-          <img src="~/img/exam.png" alt="Presentation photo" class="img-fluid h-100 w-100 object-fit-contain" asp-append-version="true" />
-        </div>
-      </div>
     </div>
-  </div>
 </section>
 
-<section>
-  <div style="height: 5vh"></div>
-  <h2 class="mb-3 text-center">Materii</h2>
-  <div class="container">
-    <div class="row">
-      <div class="col-md-6 mb-4">
-        <div class="card text-center">
-          <div class="card-body">
-            <div class="mb-3"><i class="bi bi-book"></i></div>
-          </div>
-          <h5 class="card-title">Matematică</h5>
-          <p class="card-text">
-              Algebră, analiză matematică, geometrie și trigonometrie.<br>
-              Toate lecțiile sunt structurate pe ani de studiu și capitole, conform programei școlare.
-          </p>
-          <a asp-controller="Matematica" asp-action="Index" class="btn btn-primary">Accesează</a>
+<!-- Materii -->
+<section class="bg-dark text-white py-5">
+    <div class="container">
+        <h2 class="text-center fw-bold mb-5">Materii</h2>
+        <div class="row justify-content-center">
+            <!-- Card Matematică -->
+            <div class="col-md-5 mb-4">
+                <div class="card h-100 bg-dark border border-secondary text-center p-4 materie-hover" style="border-radius: 1rem;">
+                    <div class="mb-3 fs-1 text-primary"><i class="bi bi-book"></i></div>
+                    <h4 class="fw-bold text-white">Matematică</h4>
+                    <p class="text-white">Algebră, analiză matematică, geometrie și trigonometrie</p>
+                    <p class="text-secondary">Toate lecțiile sunt structurate pe ani de studiu și capitole, conform programei școlare.</p>
+                    <a asp-controller="Matematica" asp-action="Index" class="btn btn-primary">Accesează</a>
+                </div>
+            </div>
+            <!-- Card Informatică -->
+            <div class="col-md-5 mb-4">
+                <div class="card h-100 bg-dark border border-secondary text-center p-4 materie-hover" style="border-radius: 1rem;">
+                    <div class="mb-3 fs-1 text-primary"><i class="bi bi-code-slash"></i></div>
+                    <h4 class="fw-bold text-white">Informatică</h4>
+                    <p class="text-white">Algoritmi, structuri de date, programare și baze de date</p>
+                    <p class="text-secondary">Toate lecțiile sunt structurate pe ani de studiu și capitole, conform programei școlare.</p>
+                    <a asp-controller="Informatica" asp-action="Index" class="btn btn-primary">Accesează</a>
+                </div>
+            </div>
         </div>
-      </div>
-
-      <div class="col-md-6 mb-4"></div>
-        <div class="card text-center">
-          <div class="card-body">
-            <div class="mb-3"><i class="bi bi-book"></i></div>
-          </div>
-          <h5 class="card-title">Informatică</h5>
-          <p class="card-text">
-              Algoritmi, structuri de date, programare și baze de date.<br>
-              Toate lecțiile sunt structurate pe ani de studiu și capitole, conform programei școlare.
-            </p>
-          <a asp-controller="Informatica" asp-action="Index" class="btn btn-primary">Accesează</a>
-        </div>
-      </div>
     </div>
-  </div>
 </section>
+
+
+<!-- Features Section -->
+<section class="py-5" style="background-color: #1e293b; color: white;">
+    <div class="container">
+        <p class="text-center text-secondary mb-5">Platforma noastră oferă toate instrumentele necesare pentru o pregătire eficientă pentru examenul de Bacalaureat</p>
+        <div class="row g-4 justify-content-center text-start">
+            <!-- Feature Card 1 -->
+            <div class="col-12 col-sm-6 col-lg-4">
+                <div class="bg-dark rounded p-4 h-100">
+                    <div class="fs-1 mb-3 text-info"><i class="bi bi-search"></i></div>
+                    <h5 class="fw-bold">Mindmap Interactiv</h5>
+                    <p class="text-secondary">Vizualizează structura materiei și conexiunile dintre concepte</p>
+                </div>
+            </div>
+            <!-- Feature Card 2 -->
+            <div class="col-12 col-sm-6 col-lg-4">
+                <div class="bg-dark rounded p-4 h-100">
+                    <div class="fs-1 mb-3 text-info"><i class="bi bi-book"></i></div>
+                    <h5 class="fw-bold">Lecții Structurate</h5>
+                    <p class="text-secondary">Conținut organizat pe ani de studiu și capitole conform programei școlare</p>
+                </div>
+            </div>
+            <!-- Feature Card 3 -->
+            <div class="col-12 col-sm-6 col-lg-4">
+                <div class="bg-dark rounded p-4 h-100">
+                    <div class="fs-1 mb-3 text-info"><i class="bi bi-check2-circle"></i></div>
+                    <h5 class="fw-bold">Exerciții Rezolvate</h5>
+                    <p class="text-secondary">Exemple practice cu soluții detaliate pas cu pas</p>
+                </div>
+            </div>
+            <!-- Feature Card 4 -->
+            <div class="col-12 col-sm-6 col-lg-4">
+                <div class="bg-dark rounded p-4 h-100">
+                    <div class="fs-1 mb-3 text-info"><i class="bi bi-clock"></i></div>
+                    <h5 class="fw-bold">Teste BAC</h5>
+                    <p class="text-secondary">Simulări de examen cu barem și cronometrate</p>
+                </div>
+            </div>
+            <!-- Feature Card 5 -->
+            <div class="col-12 col-sm-6 col-lg-4">
+                <div class="bg-dark rounded p-4 h-100">
+                    <div class="fs-1 mb-3 text-info"><i class="bi bi-calendar-check"></i></div>
+                    <h5 class="fw-bold">Quiz-uri Interactive</h5>
+                    <p class="text-secondary">Verifică-ți cunoștințele cu feedback instant</p>
+                </div>
+            </div>
+            <!-- Feature Card 6 -->
+            <div class="col-12 col-sm-6 col-lg-4">
+                <div class="bg-dark rounded p-4 h-100">
+                    <div class="fs-1 mb-3 text-info"><i class="bi bi-laptop"></i></div>
+                    <h5 class="fw-bold">Toate Profilurile</h5>
+                    <p class="text-secondary">Conținut adaptat pentru toate specializările: Mate-Info, Științe, Tehnologic</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Call to Action -->
+<section class="py-5 text-white text-center" style="background-color: #2196f3;">
+    <div class="container">
+        <h2 class="fw-bold mb-3">Pregătit să începi?</h2>
+        <p class="lead mb-4">Alege una dintre materiile disponibile și începe să studiezi acum pentru examenul de Bacalaureat.</p>
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <a asp-controller="Matematica" asp-action="Index" class="btn btn-dark px-4">Matematică</a>
+            <a asp-controller="Informatica" asp-action="Index" class="btn btn-dark px-4">Informatică</a>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="text-white pt-5 pb-3" style="background-color: #0f172a;">
+    <div class="container">
+        <div class="row justify-content-between text-center text-md-start">
+            <div class="col-md-4 mb-4">
+                <h5 class="fw-bold">BacPeBune</h5>
+                <p>Platformă educațională pentru pregătirea examenului de Bacalaureat la matematică și informatică</p>
+            </div>
+            <div class="col-md-4 mb-4">
+                <h5 class="fw-bold">Navigare</h5>
+                <ul class="list-unstyled">
+                    <li><a href="/" class="text-decoration-none text-light">Acasă</a></li>
+                    <li><a asp-controller="Matematica" asp-action="Index" class="text-decoration-none text-light">Matematică</a></li>
+                    <li><a asp-controller="Informatica" asp-action="Index" class="text-decoration-none text-light">Informatică</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4 mb-4">
+                <h5 class="fw-bold">Contactează-ne</h5>
+                <ul class="list-unstyled">
+                    <li><a href="mailto:contact@bacsmartlearning.ro" class="text-decoration-none text-light">contact@bacsmartlearning.ro</a></li>
+                    <li><a href="#" class="text-decoration-none text-light">Politica de confidențialitate</a></li>
+                    <li><a href="#" class="text-decoration-none text-light">Termeni și condiții</a></li>
+                </ul>
+            </div>
+        </div>
+        <hr class="border-secondary" />
+        <p class="text-center text-secondary mb-0">&copy; 2025 BacPeBune. Toate drepturile rezervate.</p>
+    </div>
+</footer>
+

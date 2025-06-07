@@ -2,7 +2,6 @@
 
 @{
     ViewBag.Title = @Model.Title;
-    var quiz = ViewBag.Quiz as BacPeBune.Models.Quiz;
 }
 
 <div class="lesson-box">
@@ -10,8 +9,10 @@
 
     <iframe src="@Model.PdfLink" width="100%" height="600px"></iframe>
 
-    @if(quiz != null){
-        <a href="@Url.Action("Show", "Quiz", new {quiz_id = ViewBag.QuizID})" width = "100%" height="600px"></a>
+
+
+    @if(ViewBag.quizID != null){
+        <a href="@Url.Action("Show", "Quiz", new { quizId = ViewBag.quizID })" width="100%" height="600px">Acceseaza quiz-ul</a>
     }
     else{
         <p class="no-quiz">Nu există un quiz asociat acestei lecții.</p>

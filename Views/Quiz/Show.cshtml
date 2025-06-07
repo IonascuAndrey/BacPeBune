@@ -1,0 +1,55 @@
+@model BacPeBune.Models.Question
+
+<h1>Question</h1>
+<p>@Model.Text</p>
+
+<form id="quizForm" method="post" asp-action="Show" asp-controller="Quiz")">
+    <input type="hidden" name="quizId" value="@Model.QuizID" />
+    <input type="hidden" name="questionIndex" value="@ViewBag.QuestionIndex" />
+    <input type="hidden" name="correctCount" value="@ViewBag.CorrectCount" />
+    <input type="hidden" name="givenAnswers" value="@ViewBag.GivenAnswers"/>
+
+    <fieldset>
+        <legend>Select an answer:</legend>
+        @if (ViewBag.Answers != null && ((List<BacPeBune.Models.Answer>)ViewBag.Answers).Any())
+        {
+            foreach (var answer in (List<BacPeBune.Models.Answer>)ViewBag.Answers)
+            {
+                <div>
+                    <input type="radio" id="answer_@answer.AnswerID" name="selectedAnswer" value="@answer.AnswerID" />
+                    <label for="answer_@answer.AnswerID">@answer.Text</label>
+                </div>
+            }
+        }
+        else
+        {
+            <p>No answers available for this question.</p>
+        }
+    </fieldset>
+    
+    <button type="submit">Submit Answer</button>
+
+    <div class="feedback">
+        @if(ViewBag.WasCorrect != null)
+        {
+            if ((bool)ViewBag.WasCorrect)
+            {
+                <p class="correct">Correct!</p>
+            }
+            else
+            {
+                <p class="incorrect">Incorrect. The correct answer was: @ViewBag.CorrectAnswerText</p>
+            }
+        }
+    </div>
+    
+    
+</form>
+
+
+
+
+@if (ViewBag.QuestionIndex != null && ViewBag.Questions != null)
+{
+    <p>Question @((int)ViewBag.QuestionIndex + 1) of @ViewBag.Questions.Count</p>
+}

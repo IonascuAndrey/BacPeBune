@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using BacPeBune.Models;
+using BacPeBune.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace BacPeBune.Areas.Identity.Pages.Account.Manage
 {
@@ -16,13 +19,15 @@ namespace BacPeBune.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
-
+        private readonly ApplicationDbContext _context;
         public IndexModel(
             UserManager<IdentityUser> userManager,
-            SignInManager<IdentityUser> signInManager)
+            SignInManager<IdentityUser> signInManager,
+            ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _context = context;
         }
 
         /// <summary>
@@ -49,6 +54,10 @@ namespace BacPeBune.Areas.Identity.Pages.Account.Manage
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
+        /// 
+        public List<UserReward> UserRewards { get; set; } = new();
+        public string UserId { get; set; }
+
         public class InputModel
         {
             /// <summary>
@@ -80,6 +89,12 @@ namespace BacPeBune.Areas.Identity.Pages.Account.Manage
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
+
+            UserId = user.Id;
+            UserRewards = await _context.UserRewards
+                .Include(r => r.Quiz)
+                .Where(r => r.UserId == UserId)
+                .ToListAsync();
 
             await LoadAsync(user);
             return Page();
