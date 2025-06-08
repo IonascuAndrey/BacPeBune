@@ -28,5 +28,12 @@ namespace BacPeBune.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        public IActionResult Magazin()
+        {
+            ViewBag.Puncte = 123; // Aici vei aduce punctele din baza de date, în viitor
+            return View();
+        }
+
     }
 }
