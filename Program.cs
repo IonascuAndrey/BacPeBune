@@ -62,125 +62,138 @@ using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
     var context = services.GetRequiredService<ApplicationDbContext>();
+
+    var sql = File.ReadAllText("Data/Init.sql");
     try
     {
-        context.Database.Migrate();
+        context.Database.EnsureCreated();
 
-        if (!context.Lessons.Any())
-        {
-            context.Lessons.Add(
-                new Lesson
-                {
-                    LessonID = 1,
-                    Title = "Introduction to Programming",
-                    Lector = 1,
-                    SubjectID = "Informatica",
-                    PdfLink = "https://x.com"
-                }
-            );
-        }
-
-        if (!context.Quizzes.Any()) {
-
-            context.Quizzes.Add(
-                new Quiz
-                {
-                    QuizID = 1,
-                    Name = "Quiz 1 for Lesson 1",
-                    Reward = 10,
-                    LessonID = 1,
-                    lesson = context.Lessons.FirstOrDefault(l => l.LessonID == 1),
-                }
-            );
-        }
-
-        if (!context.Questions.Any()) {
-            context.Questions.Add(
-                new Question
-                {
-                    QuestionID = 1,
-                    Text = "What is the main purpose of programming?",
-                    QuizID = 1,
-                    Quiz = context.Quizzes.FirstOrDefault(q => q.QuizID == 1)
-                }
-            );
-
-            context.Questions.Add(
-                new Question
-                {
-                    QuestionID = 2,
-                    Text = "What is the purpose of algorithms?",
-                    QuizID = 1,
-                    Quiz = context.Quizzes.FirstOrDefault(q => q.QuizID == 1)
-                }
-            );
-        }
-
-        if (!context.Answers.Any()) {
-            context.Answers.Add(
-                    new Answer
-                    {
-                        AnswerID = 1,
-                        Text = "To create software applications",
-                        QuestionID = 1,
-                        IsCorrect = true,
-                        question = context.Questions.FirstOrDefault(q => q.QuestionID == 1)
-                    }
-                );
-
-            context.Answers.Add(
-                new Answer
-                {
-                    AnswerID = 2,
-                    Text = "To write documentation",
-                    QuestionID = 1,
-                    IsCorrect = false,
-                    question = context.Questions.FirstOrDefault(q => q.QuestionID == 1)
-                }
-            );
-
-            context.Answers.Add(
-                new Answer
-                {
-                    AnswerID = 3,
-                    Text = "To create algorithms",
-                    QuestionID = 2,
-                    IsCorrect = true,
-                    question = context.Questions.FirstOrDefault(q => q.QuestionID == 2)
-                }
-            );
-
-            context.Answers.Add(
-                new Answer
-                {
-                    AnswerID = 4,
-                    Text = "To write code",
-                    QuestionID = 2,
-                    IsCorrect = false,
-                    question = context.Questions.FirstOrDefault(q => q.QuestionID == 2)
-                }
-            );
-
-            context.Answers.Add(
-                new Answer
-                {
-                    AnswerID = 5,
-                    Text = "To create user interfaces",
-                    QuestionID = 2,
-                    IsCorrect = false,
-                    question = context.Questions.FirstOrDefault(q => q.QuestionID == 2)
-                }
-            );
-
-        }
-
-        context.SaveChanges();
+        context.Database.ExecuteSqlRaw(sql);
     }
     catch (Exception ex)
     {
         var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "An error occurred while seeding the DB.");
+        logger.LogError(ex, "An error occurred while initializing the database.");
     }
+    // try
+    // {
+    //     context.Database.Migrate();
+
+    //     if (!context.Lessons.Any())
+    //     {
+    //         context.Lessons.Add(
+    //             new Lesson
+    //             {
+    //                 LessonID = 1,
+    //                 Title = "Introduction to Programming",
+    //                 Lector = 1,
+    //                 SubjectID = "Informatica",
+    //                 PdfLink = "https://x.com"
+    //             }
+    //         );
+    //     }
+
+    //     if (!context.Quizzes.Any()) {
+
+    //         context.Quizzes.Add(
+    //             new Quiz
+    //             {
+    //                 QuizID = 1,
+    //                 Name = "Quiz 1 for Lesson 1",
+    //                 Reward = 10,
+    //                 LessonID = 1,
+    //                 lesson = context.Lessons.FirstOrDefault(l => l.LessonID == 1),
+    //             }
+    //         );
+    //     }
+
+    //     if (!context.Questions.Any()) {
+    //         context.Questions.Add(
+    //             new Question
+    //             {
+    //                 QuestionID = 1,
+    //                 Text = "What is the main purpose of programming?",
+    //                 QuizID = 1,
+    //                 Quiz = context.Quizzes.FirstOrDefault(q => q.QuizID == 1)
+    //             }
+    //         );
+
+    //         context.Questions.Add(
+    //             new Question
+    //             {
+    //                 QuestionID = 2,
+    //                 Text = "What is the purpose of algorithms?",
+    //                 QuizID = 1,
+    //                 Quiz = context.Quizzes.FirstOrDefault(q => q.QuizID == 1)
+    //             }
+    //         );
+    //     }
+
+    //     if (!context.Answers.Any()) {
+    //         context.Answers.Add(
+    //                 new Answer
+    //                 {
+    //                     AnswerID = 1,
+    //                     Text = "To create software applications",
+    //                     QuestionID = 1,
+    //                     IsCorrect = true,
+    //                     question = context.Questions.FirstOrDefault(q => q.QuestionID == 1)
+    //                 }
+    //             );
+
+    //         context.Answers.Add(
+    //             new Answer
+    //             {
+    //                 AnswerID = 2,
+    //                 Text = "To write documentation",
+    //                 QuestionID = 1,
+    //                 IsCorrect = false,
+    //                 question = context.Questions.FirstOrDefault(q => q.QuestionID == 1)
+    //             }
+    //         );
+
+    //         context.Answers.Add(
+    //             new Answer
+    //             {
+    //                 AnswerID = 3,
+    //                 Text = "To create algorithms",
+    //                 QuestionID = 2,
+    //                 IsCorrect = true,
+    //                 question = context.Questions.FirstOrDefault(q => q.QuestionID == 2)
+    //             }
+    //         );
+
+    //         context.Answers.Add(
+    //             new Answer
+    //             {
+    //                 AnswerID = 4,
+    //                 Text = "To write code",
+    //                 QuestionID = 2,
+    //                 IsCorrect = false,
+    //                 question = context.Questions.FirstOrDefault(q => q.QuestionID == 2)
+    //             }
+    //         );
+
+    //         context.Answers.Add(
+    //             new Answer
+    //             {
+    //                 AnswerID = 5,
+    //                 Text = "To create user interfaces",
+    //                 QuestionID = 2,
+    //                 IsCorrect = false,
+    //                 question = context.Questions.FirstOrDefault(q => q.QuestionID == 2)
+    //             }
+    //         );
+
+    //     }
+
+    //     context.SaveChanges();
+    // }
+    // catch (Exception ex)
+    // {
+    //     var logger = services.GetRequiredService<ILogger<Program>>();
+    //     logger.LogError(ex, "An error occurred while seeding the DB.");
+    // }
 }
 
 

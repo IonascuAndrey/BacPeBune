@@ -34,4 +34,5 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
 EXPOSE 8080
 COPY --from=publish /app/publish .
+COPY Data/Init.sql /app/Data/Init.sql
 ENTRYPOINT ["dotnet", "BacPeBune.dll"]
