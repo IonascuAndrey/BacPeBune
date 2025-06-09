@@ -1,18 +1,16 @@
-version: '3.8'
-
 services:
   mysql:
-    image: mysql:8.0
+    image: mysql:8
     restart: always
     environment:
+      MYSQL_ROOT_PASSWORD: rootpass
       MYSQL_DATABASE: bacpebune
       MYSQL_USER: bacuser
       MYSQL_PASSWORD: bacpass
-      MYSQL_ROOT_PASSWORD: rootpass
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - "3306:3306"
-    volumes:
-      - mysql-data:/var/lib/mysql
 
   app:
     build:

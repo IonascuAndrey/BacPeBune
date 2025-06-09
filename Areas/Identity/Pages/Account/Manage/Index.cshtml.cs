@@ -56,6 +56,7 @@ namespace BacPeBune.Areas.Identity.Pages.Account.Manage
         /// </summary>
         /// 
         public List<UserReward> UserRewards { get; set; } = new();
+        public List<UserQuizResult> UserQuizResults { get; set; } = new();
         public string UserId { get; set; }
 
         public class InputModel
@@ -94,6 +95,11 @@ namespace BacPeBune.Areas.Identity.Pages.Account.Manage
             UserRewards = await _context.UserRewards
                 .Include(r => r.Quiz)
                 .Where(r => r.UserId == UserId)
+                .ToListAsync();
+
+            UserQuizResults = await _context.UserQuizResults
+                .Include(q => q.Quiz)
+                .Where(q => q.UserId == UserId)
                 .ToListAsync();
 
             await LoadAsync(user);

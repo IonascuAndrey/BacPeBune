@@ -10,19 +10,19 @@
 
 <div class="row">
     <div class="col-md-6">
-        <h4>Your Rewards</h4>
-        @if (Model.UserRewards != null && Model.UserRewards.Any())
+        <h4>Your Results</h4>
+        @if (Model.UserQuizResults != null && Model.UserQuizResults.Any())
         {
             <ul class="list-group mb-3">
-            @foreach (var reward in Model.UserRewards)
+            @foreach (var quizResult in Model.UserQuizResults)
             {
                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                @reward.Quiz.Name
-                <span class="badge bg-success rounded-pill">@reward.Reward pts</span>
+                @quizResult.Quiz.Name
+                <span class="badge bg-success rounded-pill">@quizResult.Score %</span>
                 </li>
             }
             </ul>
-            <h3>Total Rewards: @Model.UserRewards.Where(r => r.UserId == Model.UserId).Sum(r => r.Reward)</h3>
+            @* <h3>Total Rewards: @Model.UserRewards.Where(r => r.UserId == Model.UserId).Sum(r => r.Reward)</h3> *@
            
         }
         else

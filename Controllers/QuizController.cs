@@ -3,10 +3,13 @@ using BacPeBune.Data;
 using BacPeBune.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+
 
 
 namespace BacPeBune.Controllers
 {
+    [Authorize]
     public class QuizController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -134,49 +137,59 @@ namespace BacPeBune.Controllers
 
                 if (percentage >= 50)
                 {
-                    
+
                     var Quiz = _context.Quizzes.FirstOrDefault(q => q.QuizID == quizId);
-                    var UserReward = new UserReward
+                    if(!_context.UserRewards.Any(ur => ur.UserId == UserId && ur.QuizId == quizId))
                     {
-                        UserId = UserId,
-                        User = _context.Users.FirstOrDefault(u => u.Id == UserId),
-                        QuizId = quizId,
-                        Quiz = Quiz,
-                        Reward = Quiz.Reward,
-                        Date = DateTime.Now
-                    };
-                    _context.UserRewards.Add(UserReward);
-                    _context.SaveChanges();
+                        var UserReward = new UserReward
+                        {
+                            UserId = UserId,
+                            User = _context.Users.FirstOrDefault(u => u.Id == UserId),
+                            QuizId = quizId,
+                            Quiz = Quiz,
+                            Reward = Quiz.Reward,
+                            Date = DateTime.Now
+                        };
+                        _context.UserRewards.Add(UserReward);
+                        _context.SaveChanges();
+                    }
+                    
                 }
 
-                var highestScoreSoFar = _context.UserQuizResults
+                var maxScore = _context.UserQuizResults
                     .Where(user => user.UserId == UserId && user.QuizId == quizId)
-                    .Select(user => user.Score);
+                    .Select(user => (int?)user.Score)
+                    .ToList()
+                    .DefaultIfEmpty(0)
+                    .Max();
 
-                if (!highestScoreSoFar.Any())
-                {
-                    var userQuizResult = new UserQuizResult
-                    {
-                        UserId = UserId,
-                        User = _context.Users.FirstOrDefault(u => u.Id == UserId),
-                        QuizId = quizId,
-                        Quiz = _context.Quizzes.FirstOrDefault(q => q.QuizID == quizId),
-                        Score = (int)percentage
-                    };
-                    _context.UserQuizResults.Add(userQuizResult);
-                }
-
-                var maxScore = highestScoreSoFar.DefaultIfEmpty(0).Max();
                 if (percentage >= maxScore)
                 {
                     var userQuizResult = _context.UserQuizResults
                         .FirstOrDefault(user => user.UserId == UserId && user.QuizId == quizId);
-                    userQuizResult.Score = (int)percentage;
-                    _context.UserQuizResults.Update(userQuizResult);
+
+                    if (userQuizResult == null)
+                    {
+                        userQuizResult = new UserQuizResult
+                        {
+                            UserId = UserId,
+                            User = _context.Users.FirstOrDefault(u => u.Id == UserId),
+                            QuizId = quizId,
+                            Quiz = _context.Quizzes.FirstOrDefault(q => q.QuizID == quizId),
+                            Score = (int)percentage
+                        };
+                        _context.UserQuizResults.Add(userQuizResult);
+                    }
+                    else
+                    {
+                        userQuizResult.Score = (int)percentage;
+                        _context.UserQuizResults.Update(userQuizResult);
+                    }
+
                     _context.SaveChanges();
                 }
 
-                    
+
                 return View("Results");
             }
 
