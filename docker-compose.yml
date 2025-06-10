@@ -8,7 +8,7 @@ services:
       MYSQL_USER: bacuser
       MYSQL_PASSWORD: bacpass
     volumes:
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./Data/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
       - "3306:3306"
 
