@@ -151,7 +151,7 @@ const edges: Edge[] = [
   { id: 'e43-46', source: '43', target: '46' },
   { id: 'e44-46', source: '44', target: '46' },
   { id: 'e45-46', source: '45', target: '46' },
-  { id: 'e46-47', source: '36', target: '47' },
+  { id: 'e46-47', source: '46', target: '47' },
     { id: 'e47-48', source: '47', target: '48' },
     { id: 'e47-49', source: '47', target: '49' },
   { id: 'e48-50', source: '48', target: '50' },
