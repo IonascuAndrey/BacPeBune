@@ -39,6 +39,12 @@ Pe partea de prompt engineering, am identificat roluri cheie in dezoltarea aplic
 # Technical details for locally running this project
 In order to run the application, you need to have Docker Desktop installed (or Docker engine running in general) and run the following commands:
 
+-If you get an error about port 3306, you need to run:
+netstat -ano | findstr :3306
+
+Afterwards, you need to enter the specific PID returned as the next parameter
+taskkill /PID RETURNED_PROCESS_ID /F
+
 -For Updating the MySql database in a terminal (in the main folder of the project):
 docker-compose up -d mysql
 dotnet user-secrets init
