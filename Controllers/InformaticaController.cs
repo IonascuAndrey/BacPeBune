@@ -22,7 +22,7 @@ namespace BacPeBune.Controllers
         {
             return View();
         }
-
+        // Launches the frontend React App
         public IActionResult ReactApp()
         {
             var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "react-mindmap-app", "index.html");

@@ -39,7 +39,7 @@ namespace BacPeBune.Controllers
 
         public IActionResult Show(int quizId, int? questionIndex = 0)
         {
-
+            // Retrieve questions based on quizzID
             var questions = _context.Questions
             .Where(q => q.QuizID == quizId)
             .ToList();
@@ -55,7 +55,7 @@ namespace BacPeBune.Controllers
             }
 
             var currentQuestion = questions[questionIndex ?? 0];
-
+            // Retrieves correct answers
             var answers = _context.Answers
             .Where(a => a.QuestionID == currentQuestion.QuestionID)
             .ToList();
@@ -227,34 +227,4 @@ namespace BacPeBune.Controllers
         }
     }
 }
-        //[HttpGet]
-        //     public IActionResult Results(int quizId, int correctCount, int totalQuestions, double percentage, string givenAnswers )
-        // {
-        //         ViewBag.CorrectCount = correctCount;
-        //         ViewBag.TotalQuestions = totalQuestions;
-        //         ViewBag.Percentage = percentage;
-
-        //         var questions = _context.Questions
-        //             .Where(q => q.QuizID == quizId)
-        //             .ToList();
-        //         ViewBag.Questions = questions;
-
-        //         var questionIds = _context.Questions
-        //             .Where(q => q.QuizID == quizId)
-        //             .Select(q => q.QuestionID)
-        //             .ToList();
-
-
-        //         ViewBag.CorrectAnswers = _context.Answers
-        //             .Where(a => a.IsCorrect && questionIds.Contains(a.QuestionID))
-        //             .Select(a => a.Text)
-        //             .ToList();
-
-
-        //         _logger.LogInformation("Given answers: {GivenAnswers}", (object)(ViewBag.GivenAnswers as IEnumerable<int> ?? new List<int>()));
-        //         _logger.LogInformation("Correct answers: {CorrectAnswers}", (object)(ViewBag.CorrectAnswers as IEnumerable<object> ?? new List<object>()));
-
-        //         return View();
-        //     }
-        //}
     
