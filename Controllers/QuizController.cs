@@ -127,6 +127,11 @@ namespace BacPeBune.Controllers
 
                 double percentage = (double)correctCount / questions.Count * 100;
                 var UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                
+                ViewBag.Subject = _context.Lessons
+                    .Where(l => l.LessonID == _context.Quizzes.FirstOrDefault(q => q.QuizID == quizId).LessonID)
+                    .Select(l => l.SubjectID)
+                    .FirstOrDefault();
                 ViewBag.Questions = questions;
                 ViewBag.Answers = answers;
                 ViewBag.Percentage = correctCount / (double)questions.Count * 100;

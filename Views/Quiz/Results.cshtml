@@ -92,7 +92,7 @@
     <div class="container">
         <h2>Quiz Results</h2>
         <p class="summary">
-            You answered <strong>@ViewBag.CorrectCount</strong> out of <strong>@ViewBag.TotalQuestions</strong> correctly (<strong>@ViewBag.Percentage%</strong>).
+            You answered <strong>@((ViewBag.CorrectCount is not null && ViewBag.CorrectCount != false) ? ViewBag.CorrectCount : 0)</strong> out of <strong>@ViewBag.TotalQuestions</strong> correctly (<strong>@ViewBag.Percentage%</strong>).
         </p>
 
         @for (int i = 0; i < ViewBag.Questions.Count; i++)
@@ -110,11 +110,26 @@
                     <div class="right-half @(isCorrect ? "correct" : "incorrect")"></div>
                 </div>
 
-                <div class="correct-answer">
-                    <strong>Correct answer:</strong> @correctAnswer
-                </div>
+                
+                @if(!isCorrect){
+                    <div class="correct-answer">
+                        <strong>Correct answer:</strong> @correctAnswer
+                    </div>
+                }
+                
             </div>
         }
+
+        @if (ViewBag.Subject == "Matematica"){
+            <a asp-controller="Matematica" asp-action="Index" class="btn btn-primary text-center">
+                Întoarce-te la mindmap @ViewBag.Subject
+            </a>
+        }else{
+            <a asp-controller="Informatica" asp-action="Index" class="btn btn-primary text-center">
+                Întoarce-te la mindmap @ViewBag.Subject
+            </a>
+        }
+        
     </div>
 
     <footer>
