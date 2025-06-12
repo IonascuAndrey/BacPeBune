@@ -1,48 +1,125 @@
-<h2>Quiz Results</h2>
-<p>You answered <strong>@ViewBag.CorrectCount</strong> out of <strong>@ViewBag.TotalQuestions</strong> correctly (<strong>@ViewBag.Percentage%</strong>).</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Quiz Results</title>
+    <style>
+        body {
+            background-color: #0d1117;
+            color: #e6edf3;
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+        }
 
-@* @foreach(var item in ViewBag.Questions){
-    <h3>@item.Text</h3>
-}
 
-@foreach(var item in ViewBag.GivenAnswersText){
-    <p style="background-color:purple;">Your answer: @item</p>
-}
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
 
-@foreach(var item in ViewBag.CorrectAnswersText){
-    <p style="background-color:green;">Correct answer: @item</p>
-} *@
+        h2 {
+            text-align: center;
+            font-size: 2rem;
+            color: #58a6ff;
+            margin-bottom: 10px;
+        }
 
-@* @if (ViewBag.Questions != null && ViewBag.GivenAnswers != null && ViewBag.CorrectAnswers != null)
-{
-    for (int i = 0; i < ViewBag.Questions.Count && i < ViewBag.GivenAnswers.Count && i < ViewBag.CorrectAnswers.Count; i++)
-    {
-        var q = ViewBag.Questions[i];
-        var userAnswerId = ViewBag.GivenAnswers[i];
-        var correctAnswers = ViewBag.CorrectAnswers as List<dynamic>;
-        var correctAnswer = correctAnswers?.FirstOrDefault(a => a.QuestionID == q.QuestionID);
-        <h3>@q.Text</h3>
-        <p>
-            Your answer: 
-            @if (userAnswerId == (correctAnswer?.AnswerID ?? -1))
-            {
-                <span style="color:green;">Correct</span>
-            }
-            else
-            {
-                <span style="color:red;">Incorrect</span>
-            }
+        .summary {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.2rem;
+            color: #c9d1d9;
+        }
+
+        .question-block {
+            background-color: #161b22;
+            margin-bottom: 30px;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .question-block h3 {
+            color: #f0f6fc;
+            margin-bottom: 10px;
+        }
+
+        .split-bar {
+            display: flex;
+            border-radius: 6px;
+            overflow: hidden;
+            margin: 10px 0;
+            font-size: 1rem;
+        }
+
+        .left-half {
+            flex: 1;
+            background-color: #7d2ae8;
+            color: white;
+            padding: 10px;
+        }
+
+        .right-half {
+            flex: 1;
+            padding: 10px;
+        }
+
+        .right-half.correct {
+            background-color: #2ea043;
+        }
+
+        .right-half.incorrect {
+            background-color: #f85149;
+        }
+
+        .correct-answer {
+            background-color: #2ea043;
+            color: white;
+            padding: 10px;
+            border-radius: 6px;
+            margin-top: 10px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            font-size: 0.85rem;
+            color: #8b949e;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Quiz Results</h2>
+        <p class="summary">
+            You answered <strong>@ViewBag.CorrectCount</strong> out of <strong>@ViewBag.TotalQuestions</strong> correctly (<strong>@ViewBag.Percentage%</strong>).
         </p>
-        <p>Correct answer: @correctAnswer?.Text</p>
-    }
-} *@
 
-@for (int i = 0; i < ViewBag.Questions.Count; i++){
-    <h3>@ViewBag.Questions[i].Text</h3>
-    @if (ViewBag.GivenAnswersText[i] == ViewBag.CorrectAnswersText[i]){
-        <p style="background-color:green;">Your answer: @ViewBag.GivenAnswersText[i]</p>
-    } else {
-        <p style="background-color:red;">Your answer: @ViewBag.GivenAnswersText[i]</p>
-        <p style="background-color:green;">Correct answer: @ViewBag.CorrectAnswersText[i]</p>
-    }
-}
+        @for (int i = 0; i < ViewBag.Questions.Count; i++)
+        {
+            var question = ViewBag.Questions[i];
+            var userAnswer = ViewBag.GivenAnswersText[i];
+            var correctAnswer = ViewBag.CorrectAnswersText[i];
+            bool isCorrect = userAnswer == correctAnswer;
+
+            <div class="question-block">
+                <h3>@question.Text</h3>
+
+                <div class="split-bar">
+                    <div class="left-half">@userAnswer</div>
+                    <div class="right-half @(isCorrect ? "correct" : "incorrect")"></div>
+                </div>
+
+                <div class="correct-answer">
+                    <strong>Correct answer:</strong> @correctAnswer
+                </div>
+            </div>
+        }
+    </div>
+
+    <footer>
+        © 2025 BacPeBune – Recapitulare completă
+    </footer>
+</body>
+</html>
+

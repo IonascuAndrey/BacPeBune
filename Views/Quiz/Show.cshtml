@@ -1,55 +1,254 @@
 @model BacPeBune.Models.Question
 
-<h1>Question</h1>
-<p>@Model.Text</p>
-
-<form id="quizForm" method="post" asp-action="Show" asp-controller="Quiz")">
-    <input type="hidden" name="quizId" value="@Model.QuizID" />
-    <input type="hidden" name="questionIndex" value="@ViewBag.QuestionIndex" />
-    <input type="hidden" name="correctCount" value="@ViewBag.CorrectCount" />
-    <input type="hidden" name="givenAnswers" value="@ViewBag.GivenAnswers"/>
-
-    <fieldset>
-        <legend>Select an answer:</legend>
-        @if (ViewBag.Answers != null && ((List<BacPeBune.Models.Answer>)ViewBag.Answers).Any())
-        {
-            foreach (var answer in (List<BacPeBune.Models.Answer>)ViewBag.Answers)
-            {
-                <div>
-                    <input type="radio" id="answer_@answer.AnswerID" name="selectedAnswer" value="@answer.AnswerID" />
-                    <label for="answer_@answer.AnswerID">@answer.Text</label>
-                </div>
-            }
-        }
-        else
-        {
-            <p>No answers available for this question.</p>
-        }
-    </fieldset>
-    
-    <button type="submit">Submit Answer</button>
-
-    <div class="feedback">
-        @if(ViewBag.WasCorrect != null)
-        {
-            if ((bool)ViewBag.WasCorrect)
-            {
-                <p class="correct">Correct!</p>
-            }
-            else
-            {
-                <p class="incorrect">Incorrect. The correct answer was: @ViewBag.CorrectAnswerText</p>
-            }
-        }
-    </div>
-    
-    
-</form>
-
-
-
-
-@if (ViewBag.QuestionIndex != null && ViewBag.Questions != null)
-{
-    <p>Question @((int)ViewBag.QuestionIndex + 1) of @ViewBag.Questions.Count</p>
+@{
+    int totalQuestions = ViewBag.Questions.Count;
+    int currentIndex = ViewBag.QuestionIndex + 1;
+    int progressPercent = (int)((currentIndex * 100.0) / totalQuestions);
 }
+
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="utf-8" />
+    <title>Quiz</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #0d1117;
+            color: #e6edf3;
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 80px 16px 60px;
+        }
+
+        .quiz-container {
+            background-color: #161b22;
+            border-radius: 12px;
+            padding: 30px;
+            width: 100%;
+            max-width: 640px;
+            box-shadow: 0 0 12px rgba(0,0,0,0.4);
+            animation: fadeIn 0.4s ease-in-out;
+            margin-bottom: 60px;
+        }
+
+        @@keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 1.8rem;
+            color: #f0f6fc;
+            margin-bottom: 6px;
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #8b949e;
+            margin-bottom: 25px;
+        }
+
+        .score-info,
+        .timer-info {
+            text-align: right;
+            font-size: 0.9rem;
+            color: #8b949e;
+            margin-bottom: 5px;
+        }
+
+        .question-header {
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background-color: #30363d;
+            border-radius: 10px;
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+
+        .progress-bar > div {
+            height: 100%;
+            width: @progressPercent%;
+            background-color: #2ea043;
+            transition: width 0.4s ease;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        .answer-option {
+            background-color: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            padding: 12px 16px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: border-color 0.2s ease;
+        }
+
+        .answer-option:hover {
+            border-color: #58a6ff;
+        }
+
+        .answer-option input[type="radio"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+
+        .submit-button {
+            background-color: #2ea043;
+            border: none;
+            padding: 12px 16px;
+            width: 100%;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 500;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        .submit-button:hover {
+            background-color: #238636;
+        }
+
+        .feedback {
+            margin-top: 20px;
+            font-size: 1rem;
+        }
+
+        .correct { color: #2ea043; font-weight: bold; }
+        .incorrect { color: #f85149; font-weight: bold; }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #0b0e12;
+            color: #8b949e;
+            font-size: 0.85rem;
+        }
+
+        @@media (max-width: 600px) {
+            .quiz-container {
+                padding: 20px;
+            }
+
+            .submit-button {
+                font-size: 0.95rem;
+            }
+
+            .question-text, .answer-option {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-content">
+        <div class="quiz-container">
+            <h1>Quiz - Algoritmi și pseudocod</h1>
+            <div class="subtitle">Verifică-ți cunoștințele despre conceptele din acest capitol</div>
+
+            <div class="score-info">
+                Scor: @ViewBag.CorrectCount/@totalQuestions
+            </div>
+            <div class="timer-info">
+                Timp: <span id="quiz-timer">00:00</span>
+            </div>
+
+            <div class="question-header">
+                Întrebarea @currentIndex din @totalQuestions
+            </div>
+
+            <div class="progress-bar">
+                <div></div>
+            </div>
+
+            <p class="question-text">@Model.Text</p>
+
+            <form id="quizForm" method="post" asp-action="Show" asp-controller="Quiz">
+                <input type="hidden" name="quizId" value="@Model.QuizID" />
+                <input type="hidden" name="questionIndex" value="@ViewBag.QuestionIndex" />
+                <input type="hidden" name="correctCount" value="@ViewBag.CorrectCount" />
+                <input type="hidden" name="givenAnswers" value="@ViewBag.GivenAnswers" />
+
+                @if (ViewBag.Answers != null && ((List<BacPeBune.Models.Answer>)ViewBag.Answers).Any())
+                {
+                    foreach (var answer in (List<BacPeBune.Models.Answer>)ViewBag.Answers)
+                    {
+                        <label class="answer-option">
+                            <input type="radio" name="selectedAnswer" value="@answer.AnswerID" />
+                            @answer.Text
+                        </label>
+                    }
+                }
+                else
+                {
+                    <p>No answers available.</p>
+                }
+
+                <button type="submit" class="submit-button">Verifică răspunsul</button>
+
+                <div class="feedback">
+                    @if (ViewBag.WasCorrect != null)
+                    {
+                        if ((bool)ViewBag.WasCorrect)
+                        {
+                            <p class="correct">Răspuns corect!</p>
+                        }
+                        else
+                        {
+                            <p class="incorrect">Greșit. Răspunsul corect era: @ViewBag.CorrectAnswerText</p>
+                        }
+                    }
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <footer>
+        © 2025 BacPeBune. Toate drepturile rezervate.
+    </footer>
+
+    <script>
+        let startTime = Date.now();
+
+        function updateTimer() {
+            const now = Date.now();
+            const elapsedMs = now - startTime;
+            const totalSeconds = Math.floor(elapsedMs / 1000);
+            const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, '0');
+            const seconds = String(totalSeconds % 60).padStart(2, '0');
+            document.getElementById('quiz-timer').textContent = `${minutes}:${seconds}`;
+        }
+
+        setInterval(updateTimer, 1000);
+    </script>
+
+</body>
+</html>

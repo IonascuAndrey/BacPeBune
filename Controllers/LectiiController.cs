@@ -32,7 +32,6 @@ namespace BacPeBune.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-
         [Route("Lectii/{lesson_id}")]
         public IActionResult Index(int lesson_id)
         {

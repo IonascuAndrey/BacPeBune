@@ -5,43 +5,104 @@
     ViewData["ActivePage"] = ManageNavPages.Index;
 }
 
+<style>
+    body {
+        background-color: #0d1117;
+        color: #e6edf3;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    h3, h4 {
+        color: #58a6ff;
+    }
+
+    .card {
+        background-color: #161b22;
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+
+    .form-control {
+        background-color: #21262d;
+        color: #e6edf3;
+        border: 1px solid #30363d;
+    }
+
+    .form-control:focus {
+        background-color: #21262d;
+        color: #fff;
+        border-color: #58a6ff;
+        box-shadow: 0 0 0 0.25rem rgba(88,166,255,0.25);
+    }
+
+    .btn-primary {
+        background-color: #238636;
+        border-color: #238636;
+    }
+
+    .btn-primary:hover {
+        background-color: #2ea043;
+        border-color: #2ea043;
+    }
+
+    .list-group-item {
+        background-color: #21262d;
+        border: 1px solid #30363d;
+        color: #e6edf3;
+    }
+
+    .badge.bg-success {
+        background-color: #2ea043 !important;
+    }
+
+    .alert-info {
+        background-color: #0c2d4a;
+        color: #c9d1d9;
+        border: 1px solid #1f6feb;
+    }
+</style>
+
 <h3>@ViewData["Title"]</h3>
 <partial name="_StatusMessage" for="StatusMessage" />
 
 <div class="row">
-    <div class="col-md-6">
-        <h4>Your Results</h4>
-        @if (Model.UserQuizResults != null && Model.UserQuizResults.Any())
-        {
-            <ul class="list-group mb-3">
-            @foreach (var quizResult in Model.UserQuizResults)
+    <div class="col-md-8 col-lg-6">
+        <div class="card p-4 mb-4">
+            <h4>Your Results</h4>
+            @if (Model.UserQuizResults != null && Model.UserQuizResults.Any())
             {
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                @quizResult.Quiz.Name
-                <span class="badge bg-success rounded-pill">@quizResult.Score %</span>
-                </li>
+                <ul class="list-group mb-3">
+                @foreach (var quizResult in Model.UserQuizResults)
+                {
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                    @quizResult.Quiz.Name
+                    <span class="badge bg-success rounded-pill">@quizResult.Score %</span>
+                    </li>
+                }
+                </ul>
             }
-            </ul>
-            @* <h3>Total Rewards: @Model.UserRewards.Where(r => r.UserId == Model.UserId).Sum(r => r.Reward)</h3> *@
-           
-        }
-        else
-        {
-            <div class="alert alert-info">You have no rewards yet.</div>
-        }
-        <form id="profile-form" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
-            <div class="form-floating mb-3">
-                <input asp-for="Username" class="form-control" placeholder="Please choose your username." disabled />
-                <label asp-for="Username" class="form-label"></label>
-            </div>
-            <div class="form-floating mb-3">
-                <input asp-for="Input.PhoneNumber" class="form-control" placeholder="Please enter your phone number."/>
-                <label asp-for="Input.PhoneNumber" class="form-label"></label>
-                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
-            </div>
-            <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
-        </form>
+            else
+            {
+                <div class="alert alert-info">You have no rewards yet.</div>
+            }
+        </div>
+
+        <div class="card p-4">
+            <form id="profile-form" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Username" class="form-control" placeholder="Please choose your username." disabled />
+                    <label asp-for="Username" class="form-label"></label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Input.PhoneNumber" class="form-control" placeholder="Please enter your phone number."/>
+                    <label asp-for="Input.PhoneNumber" class="form-label"></label>
+                    <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                </div>
+                <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
+            </form>
+        </div>
     </div>
 </div>
 
