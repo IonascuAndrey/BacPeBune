@@ -18,7 +18,7 @@ Live demo poate fi gasit [aici](Link YT)
 
 [User Stories + Backlog](https://1drv.ms/w/c/d6c333767dde6822/EdGUJ_rJ2sBNvBSByJyT1R0BrLBUKLfz5hq1qcnPQk0AqQ?e=3VAv5b)
 
-Diagrama poate fi vazuta [aici](https://github.com/IonascuAndrey/BacPeBune/blob/main/AppFlow.png)
+Diagrama ce descrie flow-ul aplicatiei poate fi vazuta [aici](https://github.com/IonascuAndrey/BacPeBune/blob/main/AppFlow.png) iar diagrama E/R a bazei de date [aici](https://github.com/IonascuAndrey/BacPeBune/blob/main/ERDiagram.jpg)
 
 Pentru Source Control am folosit GitHub, iar istoricul commit-urilor se pot vedea [aici](https://github.com/IonascuAndrey/BacPeBune/commits/main/)
 
