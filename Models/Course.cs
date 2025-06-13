@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BacPeBune.Models
 {
-    public class Couse
+    public class Course
     {
         [Key]
         public required int CourseID { get; set; }
