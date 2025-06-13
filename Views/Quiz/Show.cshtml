@@ -171,11 +171,11 @@
 
     <div class="main-content">
         <div class="quiz-container">
-            <h1>Quiz - Algoritmi și pseudocod</h1>
+            <h1>Quiz - @ViewBag.QuizName</h1>
             <div class="subtitle">Verifică-ți cunoștințele despre conceptele din acest capitol</div>
 
             <div class="score-info">
-                Scor: @ViewBag.CorrectCount/@totalQuestions
+                Scor: @(ViewBag.CorrectCount ?? 0)/@totalQuestions
             </div>
             <div class="timer-info">
                 Timp: <span id="quiz-timer">00:00</span>
