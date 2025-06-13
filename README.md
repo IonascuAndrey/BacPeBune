@@ -30,7 +30,7 @@ Comentariile din cod pot fi vazute in majoritatea fisierelor unde erau necesare 
 
 Am ales ca tehnologie principala pentru backend ASP.NET Core care implementeaza MVC.
 
-Pe partea de prompt engineering, am identificat roluri cheie in dezoltarea aplicatiei, si am folosit modele de LLM pentru a impersona experti in domeniile respective. Prompt-urile pot fi gasite [aici]([https://onedrive.live.com/personal/d6c333767dde6822/_layouts/15/doc.aspx?resid=a5a32015-8712-4680-b33c-8931a344b39e&cid=d6c333767dde6822](https://1drv.ms/w/c/d6c333767dde6822/ERUgo6USh4BGszyJMaNEs54BmsPk64diBss6sbw55_lmOA?e=nOMjv1)) 
+Pe partea de prompt engineering, am identificat roluri cheie in dezoltarea aplicatiei, si am folosit modele de LLM pentru a impersona experti in domeniile respective. Prompt-urile pot fi gasite [aici](https://onedrive.live.com/personal/d6c333767dde6822/_layouts/15/doc.aspx?resid=a5a32015-8712-4680-b33c-8931a344b39e&cid=d6c333767dde6822](https://1drv.ms/w/c/d6c333767dde6822/ERUgo6USh4BGszyJMaNEs54BmsPk64diBss6sbw55_lmOA?e=nOMjv1)
 
 
 
