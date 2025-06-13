@@ -22,7 +22,7 @@ Diagrama ce descrie flow-ul aplicatiei poate fi vazuta [aici](https://github.com
 
 Pentru Source Control am folosit GitHub, iar istoricul commit-urilor se pot vedea [aici](https://github.com/IonascuAndrey/BacPeBune/commits/main/)
 
-Testele automate sunt [aici](Link teste)
+Testele automate sunt [aici][(Link teste)](https://github.com/IonascuAndrey/BacPeBune/tree/main/BacPeBune.Tests)
 
 Raportare bug-uri si rezolvare cu pull-request am facut, printre altele, la [#5](https://github.com/IonascuAndrey/BacPeBune/issues/5) [#11](https://github.com/IonascuAndrey/BacPeBune/issues/11) [#22](https://github.com/IonascuAndrey/BacPeBune/issues/22) 
 
