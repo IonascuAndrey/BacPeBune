@@ -9,10 +9,10 @@ using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 using Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore;
 using System.Data.Common;
 using MySqlConnector;  
-using Microsoft.AspNetCore.DataProtection; 
-using System.IO;
-using Microsoft.Extensions.Logging;      
 using BacPeBune.Models;
+using BacPeBune.Hubs;
+using Microsoft.SemanticKernel;
+using Microsoft.SemanticKernel.ChatCompletion;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,10 +38,32 @@ Console.WriteLine($"Connection string is: {connectionString}");
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddSignalR();
+
+// Semantic Kernel Configuration for Ollama
+var ollamaEndpoint = builder.Configuration["LLM:Endpoint"] ?? "http://host.docker.internal:11434";
+var ollamaModelId = builder.Configuration["LLM:ModelId"] ?? "RoLlama3.1-8b-Instruct-DPO-GGUF";
+
+#pragma warning disable SKEXP0070
+builder.Services.AddKernel()
+    .AddOllamaChatCompletion(modelId: ollamaModelId, endpoint: new Uri(ollamaEndpoint));
+#pragma warning restore SKEXP0070
+
 
 var app = builder.Build();
 
@@ -68,7 +90,10 @@ using (var scope = app.Services.CreateScope())
     {
         context.Database.EnsureCreated();
 
-        context.Database.ExecuteSqlRaw(sql);
+        if (!context.Lessons.Any())
+        {
+            context.Database.ExecuteSqlRaw(sql);
+        }
     }
     catch (Exception ex)
     {
@@ -202,12 +227,16 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseCors("AllowAll");
+
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
+
+app.MapHub<ChatHub>("/chatHub");
 
 app.Run();
 

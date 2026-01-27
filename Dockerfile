@@ -11,11 +11,11 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["BacPeBune.csproj", "."]
 
-RUN grep -q "Microsoft.EntityFrameworkCore" BacPeBune.csproj || dotnet add package Microsoft.EntityFrameworkCore --version 8.0.13
-RUN grep -q "Microsoft.EntityFrameworkCore.Tools" BacPeBune.csproj || dotnet add package Microsoft.EntityFrameworkCore.Tools --version 8.0.13
+RUN grep -q "Microsoft.EntityFrameworkCore" BacPeBune.csproj || dotnet add package Microsoft.EntityFrameworkCore --version 8.0.22
+RUN grep -q "Microsoft.EntityFrameworkCore.Tools" BacPeBune.csproj || dotnet add package Microsoft.EntityFrameworkCore.Tools --version 8.0.22
 RUN grep -q "Pomelo.EntityFrameworkCore.MySql" BacPeBune.csproj || dotnet add package Pomelo.EntityFrameworkCore.MySql --version 8.0.3
-RUN grep -q "Microsoft.AspNetCore.Identity.EntityFrameworkCore" BacPeBune.csproj || dotnet add package Microsoft.AspNetCore.Identity.EntityFrameworkCore --version 8.0.13
-RUN grep -q "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" BacPeBune.csproj || dotnet add package Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore
+RUN grep -q "Microsoft.AspNetCore.Identity.EntityFrameworkCore" BacPeBune.csproj || dotnet add package Microsoft.AspNetCore.Identity.EntityFrameworkCore --version 8.0.22
+RUN grep -q "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" BacPeBune.csproj || dotnet add package Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore --version 8.0.22
 RUN grep -q "MySqlConnector" BacPeBune.csproj || dotnet add package MySqlConnector
 
 
@@ -35,4 +35,5 @@ WORKDIR /app
 EXPOSE 8080
 COPY --from=publish /app/publish .
 COPY Data/Init.sql /app/Data/Init.sql
+COPY pdf /app/wwwroot/pdf
 ENTRYPOINT ["dotnet", "BacPeBune.dll"]

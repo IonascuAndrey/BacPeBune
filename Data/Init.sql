@@ -1,7 +1,9 @@
 
 INSERT INTO Lessons (LessonID, Title, Lector, SubjectID, PdfLink)
-VALUES (1, 'Introduction to Programming', 1, 'Informatica', 'https://x.com');
+VALUES (1, 'Introduction to Programming', 1, 'Informatica', 'https://www.youtube.com/embed/_ED79i3R-uM');
 
+INSERT INTO Lessons (LessonID, Title, Lector, SubjectID, PdfLink)
+VALUES (3, 'Operatorii în C++', 1, 'Informatica', '/pdf/3.pdf');
 
 INSERT INTO Quizzes (QuizID, Name, Reward, LessonID)
 VALUES (1, 'Quiz 1 for Lesson 1', 10, 1);
