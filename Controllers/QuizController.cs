@@ -62,6 +62,10 @@ namespace BacPeBune.Controllers
 
             var correctAnswer = answers.FirstOrDefault(a => a.IsCorrect);
 
+            ViewBag.QuizName = _context.Quizzes
+                .Where(q => q.QuizID == quizId)
+                .Select(q => q.Name)
+                .FirstOrDefault() ?? "Quiz not found";
 
             ViewBag.Questions = questions;
             ViewBag.CurrentQuestion = currentQuestion;
@@ -69,7 +73,7 @@ namespace BacPeBune.Controllers
             ViewBag.Answers = answers;
             ViewBag.IsLastQuestion = (questionIndex == questions.Count - 1);
             ViewBag.CorrectAnswerId = correctAnswer?.AnswerID ?? 0;
-            ViewBag.CorrectCount = (ViewBag.CorrectCount != null) ?? 0;
+            ViewBag.CorrectCount = ViewBag.CorrectCount ?? 0;
             ViewBag.GivenAnswers = string.Empty; // Initialize given answers as empty
 
             return View(currentQuestion);
@@ -139,12 +143,13 @@ namespace BacPeBune.Controllers
                 ViewBag.CorrectAnswersIds = correctAnswersIds;
                 ViewBag.GivenAnswersText = givenAnswersText;
                 ViewBag.CorrectAnswersText = correctAnswersTextResults;
+                ViewBag.CorrectCount = correctCount;
 
                 if (percentage >= 50)
                 {
 
                     var Quiz = _context.Quizzes.FirstOrDefault(q => q.QuizID == quizId);
-                    if(!_context.UserRewards.Any(ur => ur.UserId == UserId && ur.QuizId == quizId))
+                    if (!_context.UserRewards.Any(ur => ur.UserId == UserId && ur.QuizId == quizId))
                     {
                         var UserReward = new UserReward
                         {
@@ -158,7 +163,7 @@ namespace BacPeBune.Controllers
                         _context.UserRewards.Add(UserReward);
                         _context.SaveChanges();
                     }
-                    
+
                 }
 
                 var maxScore = _context.UserQuizResults
