@@ -1,4 +1,4 @@
-﻿@{
+﻿﻿@{
     ViewData["Title"] = "BacPeBune";
 }
 
@@ -200,6 +200,115 @@
     </div>
 </section>
 
+<!-- AI Tutor Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-4">
+            <h2 class="fw-bold">AI Tutor Personal</h2>
+            <p class="text-secondary">Ai o întrebare? Profesorul nostru virtual este aici să te ajute.</p>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-white border-bottom">
+                        <div class="d-flex align-items-center">
+                            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-2" style="width: 32px; height: 32px;">
+                                <i class="bi bi-robot"></i>
+                            </div>
+                            <strong class="text-primary">BacPeBune AI</strong>
+                        </div>
+                    </div>
+                    <div class="card-body bg-light" id="chat-history" style="height: 400px; overflow-y: auto;">
+                        <!-- Chat messages will appear here -->
+                        <div class="text-center text-muted mt-5" id="empty-state">
+                            <i class="bi bi-chat-dots fs-1"></i>
+                            <p class="mt-2">Salut! Sunt aici să te ajut cu informatica sau matematica. Întreabă-mă orice!</p>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white">
+                        <div class="input-group">
+                            <input type="text" id="messageInput" class="form-control" placeholder="Scrie întrebarea ta aici..." aria-label="Message">
+                            <button class="btn btn-primary" type="button" id="sendButton">
+                                <i class="bi bi-send-fill"></i> Trimite
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SignalR Client Script -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.0/signalr.min.js"></script>
+<script>
+    const connection = new signalR.HubConnectionBuilder()
+        .withUrl("/chatHub")
+        .withAutomaticReconnect()
+        .build();
+
+    const chatHistory = document.getElementById("chat-history");
+    const messageInput = document.getElementById("messageInput");
+    const sendButton = document.getElementById("sendButton");
+    const emptyState = document.getElementById("empty-state");
+    let currentAiMessageDiv = null;
+
+    connection.on("ReceiveMessageChunk", (chunk) => {
+        if (!currentAiMessageDiv) {
+            const wrapper = document.createElement("div");
+            wrapper.className = "d-flex mb-3";
+            wrapper.innerHTML = `
+                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-2 flex-shrink-0" style="width: 32px; height: 32px;"><i class="bi bi-robot"></i></div>
+                <div class="bg-white p-3 rounded shadow-sm border" style="max-width: 80%;">
+                    <div class="content text-dark"></div>
+                </div>`;
+            chatHistory.appendChild(wrapper);
+            currentAiMessageDiv = wrapper.querySelector(".content");
+        }
+        currentAiMessageDiv.innerHTML += chunk.replace(/\n/g, "<br>");
+        chatHistory.scrollTop = chatHistory.scrollHeight;
+    });
+
+    connection.on("ReceiveMessageDone", () => {
+        currentAiMessageDiv = null;
+        messageInput.disabled = false;
+        sendButton.disabled = false;
+        messageInput.focus();
+    });
+
+    async function start() {
+        try { await connection.start(); console.log("SignalR Connected."); } 
+        catch (err) { console.error(err); setTimeout(start, 5000); }
+    }
+
+    sendButton.addEventListener("click", async () => {
+        const msg = messageInput.value;
+        if (!msg) return;
+        if(emptyState) emptyState.style.display = 'none';
+        
+        const userDiv = document.createElement("div");
+        userDiv.className = "d-flex mb-3 justify-content-end";
+        userDiv.innerHTML = `
+            <div class="bg-primary text-white p-3 rounded shadow-sm" style="max-width: 80%;">${msg}</div>
+        `;
+        chatHistory.appendChild(userDiv);
+        chatHistory.scrollTop = chatHistory.scrollHeight;
+
+        messageInput.value = "";
+        messageInput.disabled = true;
+        sendButton.disabled = true;
+
+        try { await connection.invoke("SendMessage", msg); } 
+        catch (err) { console.error(err); messageInput.disabled = false; sendButton.disabled = false; }
+    });
+
+    messageInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter" && !sendButton.disabled) sendButton.click();
+    });
+
+    start();
+</script>
+
 <!-- Footer -->
 <footer class="text-white pt-5 pb-3" style="background-color: #0f172a;">
     <div class="container">
@@ -229,4 +338,3 @@
         <p class="text-center text-secondary mb-0">&copy; 2025 BacPeBune. Toate drepturile rezervate.</p>
     </div>
 </footer>
-

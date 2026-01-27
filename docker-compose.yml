@@ -8,9 +8,26 @@ services:
       MYSQL_USER: bacuser
       MYSQL_PASSWORD: bacpass
     volumes:
-      - ./Data/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - mysql-data:/var/lib/mysql
     ports:
       - "3306:3306"
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: bacpebune-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-data:/root/.ollama
+      - ./ollama_models:/models 
+    # 
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities: [gpu]
 
   app:
     build:
@@ -21,8 +38,12 @@ services:
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       ConnectionStrings__DefaultConnection: "server=mysql;port=3306;database=bacpebune;user=bacuser;password=bacpass;"
+      LLM__Endpoint: "http://ollama:11434"
+      LLM__ModelId: "RoLlama3.1-8b-Instruct-DPO-GGUF"
     depends_on:
       - mysql
+      - ollama
 
 volumes:
   mysql-data:
+  ollama-data:
