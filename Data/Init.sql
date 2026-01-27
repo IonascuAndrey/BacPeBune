@@ -11,6 +11,11 @@
 (9, 'Intrări/ieșiri în C++', 1, 'Matematica', 'https://pbinfo.ro/articole/7890/iostream-cpp'),
 (10, 'Citiri și scrieri cu format', 1, 'Matematica', 'https://pbinfo.ro/articole/8901/printf-scanf-cpp'),
 
+INSERT INTO Lessons (LessonID, Title, Lector, SubjectID, PdfLink)
+VALUES (1, 'Introduction to Programming', 1, 'Informatica', 'https://www.youtube.com/embed/_ED79i3R-uM');
+
+INSERT INTO Lessons (LessonID, Title, Lector, SubjectID, PdfLink)
+VALUES (3, 'Operatorii în C++', 1, 'Informatica', '/pdf/3.pdf');
 -- Escapări & fișiere
 (11, 'Secvențe escape', 1, 'Matematica', 'https://www.cplusplus.com/doc/tutorial/variables/#escapes'),
 (12, 'Operații de I/O cu fișiere în C++', 1, 'Matematica', 'https://pbinfo.ro/articole/9012/fisiere-cpp'),
